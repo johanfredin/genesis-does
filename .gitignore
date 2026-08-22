@@ -1,0 +1,17 @@
+*.elf
+*.map
+*.cpe
+*.dep
+*.o
+*.a
+
+.idea
+/.idea/**
+
+
+cmake-build-debug
+*.cbp
+
+target/*
+*.sh
+/projects/*/out/
