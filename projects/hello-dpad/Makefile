@@ -1,6 +1,6 @@
 export GDK ?= /opt/toolchains/mars/m68k-elf
-ROM_NAME := hellobg
+ROM_NAME := hellodpad
 include $(GDK)/makefile.gen
 
 run:
-	kega-fusion out/hellobg.bin
+	kega-fusion out/hellodpad.bin

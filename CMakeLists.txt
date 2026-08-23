@@ -13,4 +13,5 @@ add_executable(
         # Projects
         projects/hello-megadrive/src/main.c
         projects/hello-bg/src/main.c
+        projects/hello-dpad/src/main.c
 )
