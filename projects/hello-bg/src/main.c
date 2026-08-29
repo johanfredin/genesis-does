@@ -24,6 +24,6 @@ int main() {
 
 		VDP_setHorizontalScroll(BG_B, F16_toInt(bg_x));
 		VDP_setHorizontalScroll(BG_A, F16_toInt(fg_x));
-		VDP_waitVSync();
+		SYS_doVBlankProcess();
 	}
 }

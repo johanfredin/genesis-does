@@ -1,0 +1,5 @@
+There are 4 palettes of 16 colors each, where color 0 is transparent or the backdrop color, so really 15 unique colors per palette.
+
+For the background planes, each tile can only contain colors from one of the four palettes, but different tiles can use different palettes. You can't mix colors from different palettes in the same tile.
+
+For sprites, each sprite can only contain colors from one of the four palettes. Every tile in the sprite uses the same palette, and you can't mix colors from different palettes in the same sprite. But you can have multiple instances of the sprite on screen using different palettes. 
