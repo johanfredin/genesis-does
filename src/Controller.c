@@ -5,7 +5,8 @@
 
 #include <joy.h>
 
-void Controller_getState(const u16 port, Controller *controller) {
+//TODO: This will probably be a bit CPU heavy
+inline void Controller_getState(const u16 port, Controller *controller) {
     const u16 value = JOY_readJoypad(port);
     controller->a = value & BUTTON_A;
     controller->b = value & BUTTON_B;
@@ -15,4 +16,25 @@ void Controller_getState(const u16 port, Controller *controller) {
     controller->left = value & BUTTON_LEFT;
     controller->right = value & BUTTON_RIGHT;
     controller->start = value & BUTTON_START;
+}
+
+inline bool Controller_changed(const Controller *controller) {
+    return (
+        controller->a |
+        controller->b |
+        controller->up |
+        controller->down |
+        controller->left |
+        controller->right |
+        controller->start
+   );
+}
+
+inline bool Controller_dpadChanged(const Controller *controller) {
+    return (
+        controller->up |
+        controller->down |
+        controller->left |
+        controller->right
+   );
 }

@@ -7,16 +7,18 @@
 #include <types.h>
 
 typedef struct Controller_ {
-    u8 up: 1;
-    u8 down: 1;
-    u8 left: 1;
-    u8 right: 1;
-    u8 start: 1;
-    u8 a: 1;
-    u8 b: 1;
-    u8 c: 1;
+    bool up: 1;
+    bool down: 1;
+    bool left: 1;
+    bool right: 1;
+    bool start: 1;
+    bool a: 1;
+    bool b: 1;
+    bool c: 1;
 } Controller;
 
 void Controller_getState(u16 port, Controller *controller);
+bool Controller_changed(const Controller *controller);
+bool Controller_dpadChanged(const Controller *controller);
 
 #endif //GENESIS_DOES_CONTROLLER_H

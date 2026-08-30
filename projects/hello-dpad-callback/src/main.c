@@ -1,6 +1,6 @@
 #include <genesis.h>
 
-static void handle_input(const u16 controller, u16 changed, const u16 state) {
+static void handle_input(const u16 controller, const u16 changed, const u16 state) {
     if (changed && state != 0) {
         switch (controller) {
             case JOY_1: {
