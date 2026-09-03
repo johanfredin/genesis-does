@@ -5,6 +5,6 @@
 
 extern const Image bg_juan;
 extern const Image fg_juan;
-extern const SpriteDefinition cat;
+extern const SpriteDefinition spr_cat;
 
 #endif // _RES_RESOURCES_H_

@@ -1,0 +1,1 @@
+SPRITE spr_def_juan "../../../assets/spr/juan-spr.png" 8 8 FAST 0

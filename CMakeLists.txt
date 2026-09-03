@@ -24,4 +24,6 @@ add_executable(
         inc/Controller.h
         src/Controller.c
         projects/hello-controller/src/main.c
+        projects/hello-camera/src/main.c
+        projects/hello-map/src/main.c
 )

@@ -56,7 +56,7 @@ static void update(void) {
     SPR_update();
 }
 
-int main() {
+int main(bool bool_) {
     init();
     while (TRUE) {
         update();

@@ -1,1 +1,1 @@
-IMAGE moon "moon.bmp" 0
+IMAGE moon "../../../assets/img/moon.bmp" 0

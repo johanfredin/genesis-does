@@ -4,7 +4,7 @@
 *.dep
 *.o
 *.a
-*.res
+*.out
 
 .idea
 /.idea/**
