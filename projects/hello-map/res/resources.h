@@ -3,10 +3,10 @@
 #ifndef _RES_RESOURCES_H_
 #define _RES_RESOURCES_H_
 
-extern const TileSet fg_tileset;
-extern const MapDefinition fg_map;
-extern const Palette fg_palette;
-extern const Image bg_juan;
+extern const TileSet jungle_tileset;
+extern const MapDefinition map_jungle;
+extern const Palette jungle_palette;
+extern const Image jungle_bg;
 extern const SpriteDefinition spr_cat;
 
 #endif // _RES_RESOURCES_H_

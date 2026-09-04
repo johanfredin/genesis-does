@@ -6,8 +6,8 @@
 #define SCREEN_WIDTH 320
 #define SCREEN_HEIGHT 224
 
-#define MAP_WIDTH 512
-#define MAP_HEIGHT 256
+#define MAP_WIDTH 960
+#define MAP_HEIGHT 480
 
 static Vect2D_f16 camera = {0};
 
@@ -22,9 +22,14 @@ static void init(void) {
 
     // Init bg1
     static u16 ind = TILE_USER_INDEX;
-    PAL_setPalette(PAL0, bg_juan.palette->data, DMA);
-    VDP_drawImageEx(BG_B, &bg_juan, TILE_ATTR_FULL(PAL0, 0, 0, 0, ind), 0, 0, FALSE, TRUE);
-    ind += bg_juan.tileset->numTile;
+    PAL_setPalette(PAL0, jungle_bg.palette->data, DMA);
+    VDP_drawImageEx(BG_B, &jungle_bg, TILE_ATTR_FULL(PAL0, 0, 0, 0, ind), 0, 0, FALSE, TRUE);
+    ind += jungle_bg.tileset->numTile;
+
+    // Init map
+    VDP_loadTileSet(&jungle_tileset, ind, DMA);
+    map = MAP_create(&map_jungle, BG_A, TILE_ATTR_FULL(PAL1, 1, 0, 0, ind));
+    PAL_setPalette(PAL1, jungle_palette.data, DMA);
 
     // Init player
     PAL_setPalette(PAL2, spr_cat.palette->data, DMA);
@@ -35,10 +40,7 @@ static void init(void) {
         TILE_ATTR(PAL2, 0, 0, 0)
     );
 
-    // Init map
-    VDP_loadTileSet(&fg_tileset, ind, DMA);
-    map = MAP_create(&fg_map, BG_A, TILE_ATTR_FULL(PAL1, 1, 0, 0, ind));
-    PAL_setPalette(PAL1, fg_palette.data, DMA);
+
     // Init camera
     camera.x = 0;
     camera.y = 0;
@@ -72,7 +74,6 @@ static bool updatePlayer(void) {
         camera.y += y;
         MAP_scrollTo(map, camera.x, camera.y);
 
-        // SPR_setPosition(player, x, y);
         return TRUE;
     }
     return FALSE;

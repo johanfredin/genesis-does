@@ -14,7 +14,12 @@ static Vect2D_f16 camera = {0};
 const fix16 vel_bg = FIX16(0.66);
 const fix16 vel_fg = FIX16(1.0);
 
-static Sprite *player = NULL;
+typedef struct Player_ {
+    Sprite *spr;
+    Vect2D_s16 pos;
+} Player;
+
+static Player player = {0};
 static Controller controller = {0};
 
 
@@ -30,12 +35,9 @@ static void init(void) {
 
     // Init player
     PAL_setPalette(PAL2, spr_cat.palette->data, DMA);
-    player = SPR_addSprite(
-        &spr_cat,
-        (SCREEN_WIDTH >> 1) - (spr_cat.w >> 1),
-        (SCREEN_HEIGHT >> 1) - (spr_cat.h >> 1),
-        TILE_ATTR(PAL2, 0, 0, 0)
-    );
+    player.pos.x = (SCREEN_WIDTH >> 1);
+    player.pos.y = (SCREEN_HEIGHT >> 1);
+    player.spr = SPR_addSprite(&spr_cat, player.pos.x, player.pos.y, TILE_ATTR(PAL2, 0, 0, 0));
 
     // Init bg2
     PAL_setPalette(PAL1, fg_juan.palette->data, DMA);
@@ -50,12 +52,12 @@ static void init(void) {
 }
 
 static bool updatePlayer(void) {
-    static const fix16 vel = FIX16(3.5f);
+    static const fix16 vel = FIX16(6.33f);
     Controller_getState(JOY_1, &controller);
 
     if (Controller_dpadChanged(&controller)) {
-        fix16 x = FIX16(SPR_getPositionX(player));
-        fix16 y = FIX16(SPR_getPositionY(player));
+        fix16 x = FIX16(player.pos.x);
+        fix16 y = FIX16(player.pos.y);
 
         if (controller.up) {
             y -= vel;
@@ -65,13 +67,14 @@ static bool updatePlayer(void) {
 
         if (controller.left) {
             x -= vel;
-            SPR_setHFlip(player, true);
+            SPR_setHFlip(player.spr, true);
         } else if (controller.right) {
             x += vel;
-            SPR_setHFlip(player, false);
+            SPR_setHFlip(player.spr, false);
         }
 
-        SPR_setPosition(player, F16_toInt(x - camera.x), F16_toInt(y));
+        player.pos.x = F16_toInt(x);
+        player.pos.y = F16_toInt(y);
         return TRUE;
     }
     return FALSE;
@@ -80,14 +83,9 @@ static bool updatePlayer(void) {
 
 static void updateCamera(void) {
     // Calculate camera pos centered on player and clamp to bounds
-    camera.x = clamp(
-        SPR_getPositionX(player) - (SCREEN_WIDTH >> 1),
-        0,
-        MAP_WIDTH);
+    camera.x = clamp(player.pos.x - (SCREEN_WIDTH >> 1), 0, MAP_WIDTH - SCREEN_WIDTH);
 
-    camera.y = clamp(SPR_getPositionY(player) - (SCREEN_HEIGHT >> 1), 0, MAP_HEIGHT - SCREEN_HEIGHT);
-
-    VDP_setHorizontalScroll(BG_A, -(camera.x + 3));
+    VDP_setHorizontalScroll(BG_A, -(camera.x));
     VDP_setHorizontalScroll(BG_B, -(camera.x >> 1));
 }
 
@@ -96,6 +94,7 @@ int main(bool b) {
     while (TRUE) {
         if (updatePlayer()) {
             updateCamera();
+            SPR_setPosition(player.spr, player.pos.x - camera.x, player.pos.y);
         }
         SPR_update();
         SYS_doVBlankProcess();
