@@ -6,19 +6,32 @@
 #define SCREEN_WIDTH 320
 #define SCREEN_HEIGHT 224
 
-#define MAP_WIDTH 960
-#define MAP_HEIGHT 480
+#define MAP_WIDTH 1024
+#define MAP_HEIGHT 512
+
+#define PLAYER_CENTER_X (player.pos.x - (spr_cat.w >> 1))
+#define PLAYER_CENTER_Y (player.pos.y - (spr_cat.h >> 1))
 
 static Vect2D_f16 camera = {0};
 
-static Sprite *player = NULL;
+typedef struct Player_ {
+    Sprite *spr;
+    Vect2D_s32 pos;
+} Player;
+
 static Controller controller = {0};
 static Map *map = NULL;
+static Player player = {0};
+
+static void init(void);
+static void updateCamera(void);
+static bool updatePlayer(void);
 
 static void init(void) {
     SPR_init();
     JOY_init();
     VDP_setScreenWidth320();
+    VDP_setScreenHeight224();
 
     // Init bg1
     static u16 ind = TILE_USER_INDEX;
@@ -33,47 +46,38 @@ static void init(void) {
 
     // Init player
     PAL_setPalette(PAL2, spr_cat.palette->data, DMA);
-    player = SPR_addSprite(
-        &spr_cat,
-        (SCREEN_WIDTH >> 1) - (spr_cat.w >> 1),
-        (SCREEN_HEIGHT >> 1) - (spr_cat.h >> 1),
-        TILE_ATTR(PAL2, 0, 0, 0)
-    );
+    player.pos.x = (SCREEN_WIDTH >> 1);
+    player.pos.y = (SCREEN_HEIGHT >> 1);
+    player.spr = SPR_addSprite(&spr_cat, player.pos.x, player.pos.y, TILE_ATTR(PAL2, 0, 0, 0));
 
-
-    // Init camera
-    camera.x = 0;
-    camera.y = 0;
-
-    MAP_scrollTo(map, camera.x, camera.y);
     VDP_setScrollingMode(HSCROLL_PLANE, VSCROLL_PLANE);
+    updateCamera();
 }
 
 static bool updatePlayer(void) {
+    static const fix16 vel = FIX32(4.5f);
     Controller_getState(JOY_1, &controller);
 
     if (Controller_dpadChanged(&controller)) {
-        s16 x = camera.x;//SPR_getPositionX(player);
-        s16 y = camera.y;SPR_getPositionY(player);
+        fix32 x = FIX32(player.pos.x);
+        fix32 y = FIX32(player.pos.y);
 
         if (controller.up) {
-            y -= 1;
+            y -= vel;
         } else if (controller.down) {
-            y += 1;
+            y += vel;
         }
 
         if (controller.left) {
-            x -= 1;
-            SPR_setHFlip(player, true);
+            x -= vel;
+            SPR_setHFlip(player.spr, true);
         } else if (controller.right) {
-            x += 1;
-            SPR_setHFlip(player, false);
+            x += vel;
+            SPR_setHFlip(player.spr, false);
         }
 
-        camera.x += x;
-        camera.y += y;
-        MAP_scrollTo(map, camera.x, camera.y);
-
+        player.pos.x = F32_toInt(x);
+        player.pos.y = F32_toInt(y);
         return TRUE;
     }
     return FALSE;
@@ -81,24 +85,21 @@ static bool updatePlayer(void) {
 
 
 static void updateCamera(void) {
-    // Calculate camera pos centered on player and clamp to bounds
-    // camera.x = clamp(SPR_getPositionX(player) - (SCREEN_WIDTH >> 1), 0, MAP_WIDTH - SCREEN_WIDTH);
-    // camera.y = clamp(SPR_getPositionY(player) - (SCREEN_HEIGHT >> 1), 0, MAP_HEIGHT - SCREEN_HEIGHT);
+    camera.x = clamp(player.pos.x - (SCREEN_WIDTH >> 1), 0, MAP_WIDTH - (SCREEN_WIDTH));
+    camera.y = clamp(PLAYER_CENTER_Y - (SCREEN_HEIGHT >> 1), 0, MAP_HEIGHT - SCREEN_HEIGHT);
 
-    s16 px = SPR_getPositionX(player);
-    // camera.x = 320;
-    //
-    // MAP_scrollTo(map, camera.x, 0);
-    VDP_setHorizontalScroll(BG_B, -(camera.x >> 1));
+    MAP_scrollTo(map, camera.x, camera.y);
+    VDP_setHorizontalScroll(BG_B, 0 - (camera.x >> 1));
 }
 
 int main(bool b) {
     init();
     while (TRUE) {
         if (updatePlayer()) {
-            SPR_update();
             updateCamera();
+            SPR_setPosition(player.spr, player.pos.x - camera.x, player.pos.y - camera.y);
         }
+        SPR_update();
         SYS_doVBlankProcess();
     }
 }

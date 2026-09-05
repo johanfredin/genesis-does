@@ -13,11 +13,11 @@
             }
         },
         "jungle2.tmx": {
-            "scale": 1.5,
+            "scale": 3,
             "selectedLayer": 0,
             "viewCenter": {
-                "x": 445.6666666666666,
-                "y": 330
+                "x": 511.16666666666663,
+                "y": 388
             }
         },
         "ts_jungle.tsx": {
@@ -37,14 +37,16 @@
     "map.width": 60,
     "openFiles": [
         "ts_jungle2.tsx",
-        "jungle2.tmx"
+        "jungle2.tmx",
+        "jungle.tmx",
+        "ts_jungle.tsx"
     ],
     "project": "jungle.tiled-project",
     "recentFiles": [
         "ts_jungle2.tsx",
-        "jungle2.tmx",
+        "ts_jungle.tsx",
         "jungle.tmx",
-        "ts_jungle.tsx"
+        "jungle2.tmx"
     ],
     "tileset.lastUsedFormat": "tsx",
     "tileset.tileSize": {

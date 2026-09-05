@@ -13,3 +13,4 @@ When looking at SGDK sources, use the GitHub repo (github.com/Stephane-D/SGDK), 
 ## Working style
 - Answers should be brief and to the point, no essays
 - Never edit code, and never ask to edit it — give pointers only
+- You have read permission across this entire repo (any file, any project) — never ask for permission to read; no writing/execution/deletion without explicit request

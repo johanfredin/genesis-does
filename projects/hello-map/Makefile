@@ -11,3 +11,6 @@ include $(GDK)/makefile.gen
 
 run:
 	kega-fusion out/hello-map.bin
+
+dbg:
+	wine ~/gens.exe "./out/hello-map.bin"
