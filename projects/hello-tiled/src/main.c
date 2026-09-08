@@ -1,7 +1,7 @@
 #include <genesis.h>
 
+#include "string.h"
 #include "Controller.h"
-#include "../res/resources.h"
 
 #define SCREEN_WIDTH 320
 #define SCREEN_HEIGHT 224
@@ -19,13 +19,26 @@ typedef struct Player_ {
     Vect2D_s32 pos;
 } Player;
 
+typedef struct TMX_Spawn {
+    char *name;
+    s32 x, y, width, height;
+} TMX_Spawn;
+
+// TODO: FUGGLY solution since TMX_spawn is externally defined in resources.h. A proper lib structure will be done later
+// or in a more "serious" project
+#include "../res/resources.h"
+
 static Controller controller = {0};
 static Map *map = NULL;
 static Player player = {0};
 
 static void init(void);
+
 static void updateCamera(void);
+
 static bool updatePlayer(void);
+
+static TMX_Spawn spawn = {0};
 
 static void init(void) {
     SPR_init();
@@ -38,9 +51,9 @@ static void init(void) {
     PAL_setPalette(PAL0, jungle_bg.palette->data, DMA);
     VDP_drawImageEx(BG_B, &jungle_bg, TILE_ATTR_FULL(PAL0, 0, 0, 0, ind), 0, 0, FALSE, TRUE);
     ind += jungle_bg.tileset->numTile;
-    
+
     // Init map
-    VDP_loadTileSet(&jungle_tileset, ind, DMA);
+    VDP_loadTileSet(&map_jungle_tileset0, ind, DMA);
     map = MAP_create(&map_jungle, BG_A, TILE_ATTR_FULL(PAL1, 1, 0, 0, ind));
     PAL_setPalette(PAL1, jungle_palette.data, DMA);
 
@@ -52,6 +65,16 @@ static void init(void) {
 
     VDP_setScrollingMode(HSCROLL_PLANE, VSCROLL_PLANE);
     updateCamera();
+
+    for (size_t i = 0; i < 1; i++) {
+        spawn = (TMX_Spawn){
+            .name = spawn_point[i]->name,
+            .x = spawn_point[i]->x,
+            .y = spawn_point[i]->y,
+            .width = spawn_point[i]->width,
+            .height = spawn_point[i]->height,
+        };
+    }
 }
 
 static bool updatePlayer(void) {
@@ -101,6 +124,9 @@ int main(bool b) {
             SPR_setPosition(player.spr, player.pos.x - camera.x, player.pos.y - camera.y);
         }
         SPR_update();
+        char buf[64] = {0};
+        sprintf(buf, "spawn: name:%s, x%ld, y%ld, w:%ld, h:%ld\n", spawn.name, spawn.x, spawn.y, spawn.width, spawn.height);
+        VDP_drawText(buf, 2, 2);
         SYS_doVBlankProcess();
     }
 }
