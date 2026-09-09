@@ -21,7 +21,7 @@ typedef struct Player_ {
 
 typedef struct TMX_Spawn {
     char *name;
-    s32 x, y, width, height;
+    s32 x, y, w, h;
 } TMX_Spawn;
 
 // TODO: FUGGLY solution since TMX_spawn is externally defined in resources.h. A proper lib structure will be done later
@@ -71,8 +71,8 @@ static void init(void) {
             .name = spawn_point[i]->name,
             .x = spawn_point[i]->x,
             .y = spawn_point[i]->y,
-            .width = spawn_point[i]->width,
-            .height = spawn_point[i]->height,
+            .w = spawn_point[i]->w,
+            .h = spawn_point[i]->h,
         };
     }
 }
@@ -125,7 +125,7 @@ int main(bool b) {
         }
         SPR_update();
         char buf[64] = {0};
-        sprintf(buf, "spawn: name:%s, x%ld, y%ld, w:%ld, h:%ld\n", spawn.name, spawn.x, spawn.y, spawn.width, spawn.height);
+        sprintf(buf, "spawn: name:%s, x%ld, y%ld, w:%ld, h:%ld\n", spawn.name, spawn.x, spawn.y, spawn.w, spawn.h);
         VDP_drawText(buf, 2, 2);
         SYS_doVBlankProcess();
     }

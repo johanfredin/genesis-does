@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<map version="1.10" tiledversion="1.12.2" orientation="orthogonal" renderorder="right-down" width="64" height="32" tilewidth="16" tileheight="16" infinite="0" nextlayerid="5" nextobjectid="18">
+<map version="1.10" tiledversion="1.12.2" orientation="orthogonal" renderorder="right-down" width="64" height="32" tilewidth="16" tileheight="16" infinite="0" nextlayerid="5" nextobjectid="20">
  <tileset firstgid="1" source="ts_jungle2.tsx"/>
  <layer id="1" name="layer_fg" width="64" height="32">
   <data encoding="csv">
@@ -38,20 +38,75 @@
 </data>
  </layer>
  <objectgroup color="#ff5500" id="2" name="spawn">
-  <object id="7" name="spawn_player" type="Spawn" x="16" y="416" width="48" height="48">
+  <properties>
+   <property name="exportName" type="bool" value="true"/>
+   <property name="exportPosition" type="bool" value="true"/>
+   <property name="exportSize" type="bool" value="true"/>
+  </properties>
+  <object id="7" name="spawn_player" x="16" y="416" width="48" height="48">
    <properties>
-    <property name="name" value="brolo"/>
+    <property name="exportName" type="bool" value="true"/>
+    <property name="exportPosition" type="bool" value="true"/>
+    <property name="exportSize" type="bool" value="true"/>
    </properties>
   </object>
  </objectgroup>
  <objectgroup color="#0055ff" id="3" name="platform" class="Platform">
-  <object id="10" x="0" y="464" width="192" height="16"/>
-  <object id="11" x="208" y="416" width="112" height="16"/>
-  <object id="12" x="400" y="416" width="112" height="16"/>
-  <object id="13" x="496" y="352" width="192" height="16"/>
-  <object id="14" x="224" y="288" width="144" height="16"/>
-  <object id="15" x="480" y="272" width="144" height="16"/>
-  <object id="16" x="608" y="464" width="128" height="16"/>
-  <object id="17" x="752" y="480" width="208" height="16"/>
+  <object id="10" x="0" y="464" width="192" height="16">
+   <properties>
+    <property name="exportName" type="bool" value="true"/>
+    <property name="exportPosition" type="bool" value="true"/>
+    <property name="exportSize" type="bool" value="true"/>
+   </properties>
+  </object>
+  <object id="11" x="208" y="416" width="112" height="16">
+   <properties>
+    <property name="exportName" type="bool" value="true"/>
+    <property name="exportPosition" type="bool" value="true"/>
+    <property name="exportSize" type="bool" value="true"/>
+   </properties>
+  </object>
+  <object id="12" x="400" y="416" width="112" height="16">
+   <properties>
+    <property name="exportName" type="bool" value="true"/>
+    <property name="exportPosition" type="bool" value="true"/>
+    <property name="exportSize" type="bool" value="true"/>
+   </properties>
+  </object>
+  <object id="13" x="496" y="352" width="192" height="16">
+   <properties>
+    <property name="exportName" type="bool" value="true"/>
+    <property name="exportPosition" type="bool" value="true"/>
+    <property name="exportSize" type="bool" value="true"/>
+   </properties>
+  </object>
+  <object id="14" x="224" y="288" width="144" height="16">
+   <properties>
+    <property name="exportName" type="bool" value="true"/>
+    <property name="exportPosition" type="bool" value="true"/>
+    <property name="exportSize" type="bool" value="true"/>
+   </properties>
+  </object>
+  <object id="15" x="480" y="272" width="144" height="16">
+   <properties>
+    <property name="exportName" type="bool" value="true"/>
+    <property name="exportPosition" type="bool" value="true"/>
+    <property name="exportSize" type="bool" value="true"/>
+   </properties>
+  </object>
+  <object id="16" x="608" y="464" width="128" height="16">
+   <properties>
+    <property name="exportName" type="bool" value="true"/>
+    <property name="exportPosition" type="bool" value="true"/>
+    <property name="exportSize" type="bool" value="true"/>
+   </properties>
+  </object>
+  <object id="17" x="752" y="480" width="208" height="16">
+   <properties>
+    <property name="exportName" type="bool" value="true"/>
+    <property name="exportPosition" type="bool" value="true"/>
+    <property name="exportSize" type="bool" value="true"/>
+   </properties>
+  </object>
  </objectgroup>
 </map>
