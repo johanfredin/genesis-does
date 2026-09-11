@@ -19,10 +19,14 @@ typedef struct Player_ {
     Vect2D_s32 pos;
 } Player;
 
-typedef struct TMX_Spawn {
+typedef struct TMX_Spawn_ {
     char *name;
-    s32 x, y, w, h;
+    u16 x, y, w, h;
 } TMX_Spawn;
+
+typedef struct TMX_Platform_ {
+    u16 x, y, w, h;
+} TMX_Platform;
 
 // TODO: FUGGLY solution since TMX_spawn is externally defined in resources.h. A proper lib structure will be done later
 // or in a more "serious" project
@@ -75,6 +79,12 @@ static void init(void) {
             .h = spawn_point[i]->h,
         };
     }
+
+    KLog("Hellooooooo");
+    kprintf("spawn: name:%s, x:%d, y:%d, w:%d, h:%d\n", spawn.name, spawn.x, spawn.y, spawn.w, spawn.h);
+    for (size_t i = 0; i < 8; i++) {
+        kprintf("platform: x:%d, y:%d, w:%d, h:%d\n", platforms[i]->x, platforms[i]->y, platforms[i]->w, platforms[i]->h);
+    }
 }
 
 static bool updatePlayer(void) {
@@ -117,6 +127,10 @@ static void updateCamera(void) {
 }
 
 int main(bool b) {
+    if (!b) {
+        SYS_hardReset();
+    }
+
     init();
     while (TRUE) {
         if (updatePlayer()) {
@@ -124,9 +138,6 @@ int main(bool b) {
             SPR_setPosition(player.spr, player.pos.x - camera.x, player.pos.y - camera.y);
         }
         SPR_update();
-        char buf[64] = {0};
-        sprintf(buf, "spawn: name:%s, x%ld, y%ld, w:%ld, h:%ld\n", spawn.name, spawn.x, spawn.y, spawn.w, spawn.h);
-        VDP_drawText(buf, 2, 2);
         SYS_doVBlankProcess();
     }
 }
