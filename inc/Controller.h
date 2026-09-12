@@ -17,6 +17,7 @@ typedef struct Controller_ {
     bool c: 1;
 } Controller;
 
+void Controller_init(void);
 void Controller_getState(u16 port, Controller *controller);
 bool Controller_changed(const Controller *controller);
 bool Controller_dpadChanged(const Controller *controller);

@@ -5,7 +5,10 @@
 
 #include <joy.h>
 
-//TODO: This will probably be a bit CPU heavy
+void Controller_init(void) {
+    JOY_init();
+}
+
 inline void Controller_getState(const u16 port, Controller *controller) {
     const u16 value = JOY_readJoypad(port);
     controller->a = value & BUTTON_A;
@@ -27,14 +30,9 @@ inline bool Controller_changed(const Controller *controller) {
         controller->left |
         controller->right |
         controller->start
-   );
+    );
 }
 
 inline bool Controller_dpadChanged(const Controller *controller) {
-    return (
-        controller->up |
-        controller->down |
-        controller->left |
-        controller->right
-   );
+    return controller->up | controller->down | controller->left | controller->right;
 }

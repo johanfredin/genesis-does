@@ -1,5 +1,5 @@
 export GDK ?= /opt/toolchains/mars/m68k-elf
-ROM_NAME := hello-tiled
+ROM_NAME := hello-collision
 
 # extra include path for the shared common lib (not overwritten by makefile.gen)
 EXTRA_FLAGS := -I../../inc
@@ -10,7 +10,4 @@ override SRC_C += ../../src/Controller.c
 include $(GDK)/makefile.gen
 
 run:
-	kega-fusion out/hello-tiled.bin
-
-dbg:
-	wine ~/gens.exe "./out/hello-tiled.bin"
+	kega-fusion out/hello-collision.bin
