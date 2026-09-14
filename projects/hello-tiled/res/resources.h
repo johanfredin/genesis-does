@@ -3,6 +3,7 @@
 #ifndef _RES_RESOURCES_H_
 #define _RES_RESOURCES_H_
 
+extern const u8 music[23296];
 extern const TileSet map_jungle_tileset0;
 extern const MapDefinition map_jungle;
 extern const Palette jungle_palette;

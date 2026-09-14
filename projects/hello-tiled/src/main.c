@@ -85,6 +85,9 @@ static void init(void) {
     for (size_t i = 0; i < 8; i++) {
         kprintf("platform: x:%d, y:%d, w:%d, h:%d\n", platforms[i]->x, platforms[i]->y, platforms[i]->w, platforms[i]->h);
     }
+
+    // play a funky tune
+    XGM_startPlay(music);
 }
 
 static bool updatePlayer(void) {

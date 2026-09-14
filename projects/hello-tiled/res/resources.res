@@ -9,3 +9,5 @@ OBJECTS platforms "../../../assets/tilemap/jungle2.tmx" "platform" "x:u16;y:u16;
 
 IMAGE jungle_bg "../../../assets/img/jungle_bg.png" BEST ALL
 SPRITE spr_cat "../../../assets/spr/mega_cat.png" 6 6 FAST 0
+
+XGM music "../../../assets/music/ooze.vgm"
