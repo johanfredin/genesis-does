@@ -140,6 +140,15 @@ int main(bool b) {
             updateCamera();
             SPR_setPosition(player.spr, player.pos.x - camera.x, player.pos.y - camera.y);
         }
+
+        char buf[32] = {0};
+        const s32 px = player.pos.x;
+        const s32 py = player.pos.y;
+        const u16 tileAt = MAP_getTile(map, px >> 3, py >> 3);
+        const u16 metaTileAt = MAP_getMetaTile(map, px >> 4, py >> 4);
+
+        sprintf(buf, "tile=%d, metaTile=%d", tileAt, metaTileAt);
+        VDP_drawTextBG(BG_A, buf, 5, 5);
         SPR_update();
         SYS_doVBlankProcess();
     }

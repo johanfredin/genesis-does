@@ -1,7 +1,7 @@
 cmake_minimum_required(VERSION 4.2)
 project(genesis_does C)
 
-set(CMAKE_C_STANDARD 11)
+set(CMAKE_C_STANDARD 23)
 
 include_directories(
         /opt/toolchains/mars/m68k-elf/inc
@@ -18,7 +18,6 @@ add_executable(
         projects/hello-megadrive/src/main.c
         projects/hello-bg/src/main.c
         projects/hello-dpad-callback/src/main.c
-        projects/tmx-map/src/main.c
         projects/hello-sprite/src/main.c
         projects/hello-animation/src/main.c
         inc/Controller.h
@@ -26,4 +25,7 @@ add_executable(
         projects/hello-controller/src/main.c
         projects/hello-camera/src/main.c
         projects/hello-map/src/main.c
+        projects/hello-collision/src/main.c
+        projects/hello-tiled/src/main.c
+        projects/hello-tiled-with-collision/src/main.c
 )

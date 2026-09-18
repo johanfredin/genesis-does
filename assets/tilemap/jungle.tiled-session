@@ -7,6 +7,10 @@
         "": {
             "scaleInDock": 1
         },
+        "/home/johan/IdeaProjects/private/genesis-does/assets/tilesets/ts_col.tsx": {
+            "scaleInDock": 1,
+            "scaleInEditor": 1
+        },
         "jungle.tmx": {
             "scale": 7.43375,
             "selectedLayer": 0,
@@ -16,11 +20,11 @@
             }
         },
         "jungle2.tmx": {
-            "scale": 1,
-            "selectedLayer": 0,
+            "scale": 1.8081,
+            "selectedLayer": 1,
             "viewCenter": {
-                "x": 748.5,
-                "y": 370
+                "x": 72.17521154803384,
+                "y": 350.64432276975833
             }
         },
         "jungle2.tmx#ts_jungle": {
@@ -48,19 +52,23 @@
     "openFiles": [
         "ts_jungle2.tsx",
         "jungle2.tmx",
-        "jungle.tmx"
+        "jungle.tmx",
+        "ts_jungle.tsx",
+        "sky_bg.tsx",
+        "/home/johan/IdeaProjects/private/genesis-does/assets/tilesets/ts_col.tsx"
     ],
     "project": "jungle.tiled-project",
     "recentFiles": [
-        "jungle.tmx",
-        "jungle2.tmx",
         "ts_jungle2.tsx",
+        "/home/johan/IdeaProjects/private/genesis-does/assets/tilesets/ts_col.tsx",
         "sky_bg.tsx",
-        "ts_jungle.tsx"
+        "ts_jungle.tsx",
+        "jungle.tmx",
+        "jungle2.tmx"
     ],
     "tileset.lastUsedFormat": "tsx",
     "tileset.tileSize": {
-        "height": 16,
-        "width": 16
+        "height": 8,
+        "width": 8
     }
 }

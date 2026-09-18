@@ -18,7 +18,7 @@
 
 typedef struct Bounds_ {
     f32 x, y;
-    u8 w, h;
+    f16 w, h;
 } Bounds;
 
 typedef struct player_ {
@@ -29,28 +29,22 @@ typedef struct player_ {
     Bounds bounds;
 } Player;
 
-static void init(void);
-
-static void update(void);
-
+static void init();
+static void update();
 static void initPlayer(u16 palette, u16 prio, bool flipV, bool flibH);
-
 static u16 uploadSolidTile(u16 palette, u16 color);
-
-static bool updatePlayer(void);
-
-static void checkCollision(void);
-
-static void logPositions(void);
+static bool updatePlayer();
+static void checkCollision();
+static void logPositions();
 
 static Player player = {0};
 static Controller controller = {0};
 static Bounds box = {0};
-static u16 ind = TILE_USER_INDEX;;
+static u16 ind = TILE_USER_INDEX;
 
-static const f32 diff = F32(16);
+static constexpr f32 diff = F32(16);
 
-static void init(void) {
+static void init() {
     SPR_init();
     Controller_init();
     initPlayer(PAL2, 0, FALSE, FALSE);
@@ -106,16 +100,16 @@ static u16 uploadSolidTile(const u16 palette, const u16 color) {
     return TILE_ATTR_FULL(palette, 0, 0, 0, ind);
 }
 
-static void update(void) {
+static void update() {
     if (updatePlayer()) {
         checkCollision();
     }
-    SPR_setPosition(player.spr, F32_toInt(player.pos.x), F32_toInt(player.pos.y));
+    SPR_setPosition(player.spr, (s16) F32_toInt(player.pos.x), (s16) F32_toInt(player.pos.y));
     SPR_update();
 }
 
-static bool updatePlayer(void) {
-    static const fix16 vel = FIX32(4.5f);
+static bool updatePlayer() {
+    static const f32 vel = FIX32(4.5f);
     Controller_getState(JOY_1, &controller);
     player.heading = HEADING_NONE;
     player.bounds.x = player.pos.x + diff;
@@ -164,7 +158,7 @@ static bool overlap() {
            ((pbY + pbH) > box.y);
 }
 
-static void resolveCollision(void) {
+static void resolveCollision() {
     const f32 old_x = player.prev.x;
     const f32 old_y = player.prev.y;
     const f32 right = player.bounds.x + F32(player.bounds.w);
@@ -178,15 +172,15 @@ static void resolveCollision(void) {
         player.pos.x = (box.x - F32(PLAYER_W));
     } else if (player.bounds.x <= boxRight & old_x >= boxRight) { // From right
         player.pos.x = boxRight - diff;
-    } if (bottom >= box.y && oldBottom <= box.y) {
+    } if (bottom >= box.y & oldBottom <= box.y) {
         player.pos.y = (box.y - F32(player.bounds.h)) - diff;
-    } else if (player.bounds.y <= rightBottom && old_y >= rightBottom) {
+    } else if (player.bounds.y <= rightBottom & old_y >= rightBottom) {
         player.pos.y = rightBottom - diff;
     }
 
 }
 
-static void checkCollision(void) {
+static void checkCollision() {
     if (overlap()) {
         VDP_drawTextBG(BG_A, "COLLISION", 1, 5);
         resolveCollision();
@@ -195,7 +189,7 @@ static void checkCollision(void) {
     }
 }
 
-static void logPositions(void) {
+static void logPositions() {
     char pos_buf[32] = {0};
     char box_buf[32] = {0};
     char prev_buf[32] = {0};
