@@ -16,10 +16,18 @@ typedef struct Player_ {
     Vect2D_ff32 pos;
 } Player;
 
+typedef enum CollisionTileType_ {
+    HARD_BLOCK = 0,
+    SOFT_BLOCK = 1,
+    SPAWN = 2,
+    NONE = 3
+} CollisionTileType;
+
 static Controller controller = {0};
 static Map *mapBg = nullptr;
 static Map *mapFg = nullptr;
 static Player player = {0};
+static CollisionTileType collisionTileType = NONE;
 
 static void init();
 static void updateCamera();
@@ -92,6 +100,18 @@ static void updateCamera() {
     MAP_scrollTo(mapFg, camera.x, camera.y);
 }
 
+
+static void checkCollision() {
+    VDP_clearText(6, 6, 30);
+    const u16 x = (u16) (FF32_toRoundedInt(player.pos.x) >> 3);
+    const u16 y = (u16) (FF32_toRoundedInt(player.pos.y) >> 3);
+
+    const u16 tileAt = *(tilemap_collision.tilemap + (tilemap_collision.w * y + x));
+    char buf[64] = {0};
+    sprintf(buf, "px=%u, py=%u, tileAt=%u", x, y, tileAt);
+    VDP_drawText(buf, 6, 6);
+}
+
 int main(bool b) {
     if (!b) {
         SYS_hardReset();
@@ -100,6 +120,7 @@ int main(bool b) {
     init();
     while (TRUE) {
         if (updatePlayer()) {
+            checkCollision();
             updateCamera();
             SPR_setPosition(player.spr, FF32_toInt(player.pos.x) - camera.x, FF32_toInt(player.pos.y) - camera.y);
         }
