@@ -1,6 +1,6 @@
 #include <genesis.h>
 #include "../res/resources.h"
-#include "string.h"
+// #include "string.h"
 #include "Controller.h"
 
 #define SCREEN_WIDTH 320
@@ -17,7 +17,8 @@ typedef struct Player_ {
 } Player;
 
 static Controller controller = {0};
-static Map *map = nullptr;
+static Map *mapBg = nullptr;
+static Map *mapFg = nullptr;
 static Player player = {0};
 
 static void init();
@@ -25,7 +26,7 @@ static void updateCamera();
 static bool updatePlayer();
 
 static void init() {
-    SPR_init();
+    SPR_initEx(36);
     Controller_init();
     VDP_setScreenWidth320();
     VDP_setScreenHeight224();
@@ -34,10 +35,16 @@ static void init() {
     static u16 ind = TILE_USER_INDEX;
 
     // Init map (bg)
-    VDP_loadTileSet(&tileset_jungle3, ind, DMA);
-    map = MAP_create(&map_jungle3, BG_B, TILE_ATTR_FULL(PAL0, 0, 0, 0, ind));
-    PAL_setPalette(PAL0, palette_jungle3.data, DMA);
-    ind += tileset_jungle3.numTile;
+    VDP_loadTileSet(&tileset_bg_jungle3, ind, DMA);
+    mapBg = MAP_create(&map_bg_jungle3, BG_B, TILE_ATTR_FULL(PAL0, 0, 0, 0, ind));
+    PAL_setPalette(PAL0, palette_bg_jungle3.data, DMA);
+    ind += tileset_bg_jungle3.numTile;
+
+    // Init map (fg)
+    VDP_loadTileSet(&tileset_fg_jungle3, ind, DMA);
+    mapFg = MAP_create(&map_fg_jungle3, BG_A, TILE_ATTR_FULL(PAL1, 0, 0, 0, ind));
+    PAL_setPalette(PAL1, palette_fg_jungle3.data, DMA);
+    ind += tileset_fg_jungle3.numTile;
 
     // Init player
     PAL_setPalette(PAL2, spr_cat.palette->data, DMA);
@@ -81,7 +88,8 @@ static void updateCamera() {
     camera.x = clamp(pX - (SCREEN_WIDTH >> 1), 0, MAP_WIDTH - SCREEN_WIDTH);
     camera.y = clamp(pY - (SCREEN_HEIGHT >> 1), 0, MAP_HEIGHT - SCREEN_HEIGHT);
 
-    MAP_scrollTo(map, camera.x, camera.y);
+    MAP_scrollTo(mapBg, camera.x >> 2, camera.y >> 2);
+    MAP_scrollTo(mapFg, camera.x, camera.y);
 }
 
 int main(bool b) {

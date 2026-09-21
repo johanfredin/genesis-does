@@ -20,7 +20,7 @@ typedef struct Player_ {
 } Player;
 
 static Controller controller = {0};
-static Map *map = NULL;
+static Map *mapBg = NULL;
 static Player player = {0};
 
 static void init(void);
@@ -41,7 +41,7 @@ static void init(void) {
     
     // Init map
     VDP_loadTileSet(&jungle_tileset, ind, DMA);
-    map = MAP_create(&map_jungle, BG_A, TILE_ATTR_FULL(PAL1, 1, 0, 0, ind));
+    mapBg = MAP_create(&map_jungle, BG_A, TILE_ATTR_FULL(PAL1, 1, 0, 0, ind));
     PAL_setPalette(PAL1, jungle_palette.data, DMA);
 
     // Init player
@@ -88,7 +88,7 @@ static void updateCamera(void) {
     camera.x = clamp(player.pos.x - (SCREEN_WIDTH >> 1), 0, MAP_WIDTH - SCREEN_WIDTH);
     camera.y = clamp(PLAYER_CENTER_Y - (SCREEN_HEIGHT >> 1), 0, MAP_HEIGHT - SCREEN_HEIGHT);
 
-    MAP_scrollTo(map, camera.x, camera.y);
+    MAP_scrollTo(mapBg, camera.x, camera.y);
     VDP_setHorizontalScroll(BG_B, 0 - (camera.x >> 1));
     VDP_setVerticalScroll(BG_B, camera.y >> 4);
 }

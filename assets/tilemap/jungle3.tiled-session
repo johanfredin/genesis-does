@@ -1,17 +1,94 @@
 {
-    "activeFile": "",
+    "activeFile": "jungle3_8x8.tmx",
     "expandedProjectPaths": [
+        "."
     ],
+    "file.lastUsedOpenFilter": "All Files (*)",
     "fileStates": {
+        "/home/johan/IdeaProjects/SGDK/sample/tiled/tmx-map/res/levels/bg_prio.tsx": {
+            "scaleInDock": 1
+        },
+        "/home/johan/IdeaProjects/SGDK/sample/tiled/tmx-map/res/levels/fg_prio.tsx": {
+            "scaleInDock": 1
+        },
+        "/home/johan/IdeaProjects/SGDK/sample/tiled/tmx-map/res/levels/map.tmx": {
+            "scale": 1.3151562499999998,
+            "selectedLayer": 0,
+            "viewCenter": {
+                "x": 400.7128430557206,
+                "y": 204.53843412142098
+            }
+        },
+        "/home/johan/IdeaProjects/SGDK/sample/tiled/tmx-map/res/levels/tileset_bg.tsx": {
+            "scaleInDock": 1
+        },
+        "/home/johan/IdeaProjects/SGDK/sample/tiled/tmx-map/res/levels/tileset_fg.tsx": {
+            "scaleInDock": 1
+        },
+        "/home/johan/IdeaProjects/private/genesis-does/assets/tilesets/jungle3_bg.tsx": {
+            "scaleInDock": 1,
+            "scaleInEditor": 1
+        },
+        "/home/johan/IdeaProjects/private/genesis-does/assets/tilesets/jungle3_fg.tsx": {
+            "scaleInDock": 2,
+            "scaleInEditor": 1
+        },
+        "jungle.tmx": {
+            "scale": 7.014166666666667,
+            "selectedLayer": 0,
+            "viewCenter": {
+                "x": 120.11405488891528,
+                "y": 79.98099085184745
+            }
+        },
+        "jungle2.tmx": {
+            "scale": 1.6439453124999999,
+            "selectedLayer": 2,
+            "viewCenter": {
+                "x": 512.4866341927053,
+                "y": 256.09124391113227
+            }
+        },
+        "jungle3_8x8.tmx": {
+            "scale": 2,
+            "selectedLayer": 3,
+            "viewCenter": {
+                "x": 604.25,
+                "y": 117.5
+            }
+        },
+        "sky_bg.tsx": {
+            "scaleInDock": 1,
+            "scaleInEditor": 1
+        },
+        "ts_jungle.tsx": {
+            "scaleInDock": 1,
+            "scaleInEditor": 1
+        },
+        "ts_jungle2.tsx": {
+            "scaleInDock": 1,
+            "scaleInEditor": 1
+        }
     },
     "last.imagePath": "/home/johan/IdeaProjects/private/genesis-does/assets/tilesets",
     "map.lastUsedFormat": "tmx",
     "map.tileHeight": 8,
     "map.tileWidth": 8,
     "openFiles": [
+        "jungle3_8x8.tmx"
     ],
     "project": "jungle3.tiled-project",
+    "property.type": "bool",
     "recentFiles": [
+        "jungle.tmx",
+        "jungle2.tmx",
+        "sky_bg.tsx",
+        "ts_jungle.tsx",
+        "ts_jungle2.tsx",
+        "/home/johan/IdeaProjects/SGDK/sample/tiled/tmx-map/res/levels/map.tmx",
+        "/home/johan/IdeaProjects/private/genesis-does/assets/tilesets/jungle3_fg.tsx",
+        "/home/johan/IdeaProjects/private/genesis-does/assets/tilesets/jungle3_bg.tsx",
+        "jungle3_8x8.tmx"
     ],
     "tileset.lastUsedFormat": "tsx",
     "tileset.tileSize": {
