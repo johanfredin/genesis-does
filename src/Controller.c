@@ -5,7 +5,7 @@
 
 #include <joy.h>
 
-void Controller_init(void) {
+void Controller_init() {
     JOY_init();
 }
 

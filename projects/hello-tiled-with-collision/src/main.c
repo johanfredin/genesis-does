@@ -66,7 +66,7 @@ static void init() {
 }
 
 static bool updatePlayer() {
-    static const ff32 vel = FF32(4.5f);
+    static constexpr ff32 vel = FF32(1);
     Controller_getState(JOY_1, &controller);
 
     if (Controller_dpadChanged(&controller)) {
@@ -102,14 +102,15 @@ static void updateCamera() {
 
 
 static void checkCollision() {
-    VDP_clearText(6, 6, 30);
+    VDP_clearText(6, 6, 40);
     const u16 x = (u16) (FF32_toRoundedInt(player.pos.x) >> 3);
     const u16 y = (u16) (FF32_toRoundedInt(player.pos.y) >> 3);
 
-    const u16 tileAt = *(tilemap_collision.tilemap + (tilemap_collision.w * y + x));
+    const size_t offset = (tilemap_collision.w * y + x);
+    const u16 tileAt = tilemap_collision.tilemap[offset];
     char buf[64] = {0};
-    sprintf(buf, "px=%u, py=%u, tileAt=%u", x, y, tileAt);
-    VDP_drawText(buf, 6, 6);
+    sprintf(buf, "px=%u, py=%u, offset=%lu, tileAt=%u", x, y, offset, tileAt);
+    VDP_drawText(buf, 2, 6);
 }
 
 int main(bool b) {

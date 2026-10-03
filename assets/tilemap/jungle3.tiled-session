@@ -33,6 +33,10 @@
             "scaleInDock": 2,
             "scaleInEditor": 1
         },
+        "/home/johan/IdeaProjects/private/genesis-does/assets/tilesets/ts_col.tsx": {
+            "scaleInDock": 4,
+            "scaleInEditor": 1
+        },
         "jungle.tmx": {
             "scale": 7.014166666666667,
             "selectedLayer": 0,
@@ -42,19 +46,25 @@
             }
         },
         "jungle2.tmx": {
+            "expandedObjectLayers": [
+                3
+            ],
             "scale": 1.6439453124999999,
-            "selectedLayer": 2,
+            "selectedLayer": 3,
             "viewCenter": {
-                "x": 512.4866341927053,
-                "y": 256.09124391113227
+                "x": 95.80610668884401,
+                "y": 472.03516692408226
             }
         },
         "jungle3_8x8.tmx": {
-            "scale": 2,
+            "expandedObjectLayers": [
+                8
+            ],
+            "scale": 4,
             "selectedLayer": 3,
             "viewCenter": {
-                "x": 604.25,
-                "y": 117.5
+                "x": 151.875,
+                "y": 180
             }
         },
         "sky_bg.tsx": {
@@ -75,11 +85,14 @@
     "map.tileHeight": 8,
     "map.tileWidth": 8,
     "openFiles": [
-        "jungle3_8x8.tmx"
+        "jungle3_8x8.tmx",
+        "/home/johan/IdeaProjects/private/genesis-does/assets/tilesets/ts_col.tsx"
     ],
     "project": "jungle3.tiled-project",
     "property.type": "bool",
     "recentFiles": [
+        "/home/johan/IdeaProjects/private/genesis-does/assets/tilesets/ts_col.tsx",
+        "jungle3_8x8.tmx",
         "jungle.tmx",
         "jungle2.tmx",
         "sky_bg.tsx",
@@ -87,8 +100,7 @@
         "ts_jungle2.tsx",
         "/home/johan/IdeaProjects/SGDK/sample/tiled/tmx-map/res/levels/map.tmx",
         "/home/johan/IdeaProjects/private/genesis-does/assets/tilesets/jungle3_fg.tsx",
-        "/home/johan/IdeaProjects/private/genesis-does/assets/tilesets/jungle3_bg.tsx",
-        "jungle3_8x8.tmx"
+        "/home/johan/IdeaProjects/private/genesis-does/assets/tilesets/jungle3_bg.tsx"
     ],
     "tileset.lastUsedFormat": "tsx",
     "tileset.tileSize": {

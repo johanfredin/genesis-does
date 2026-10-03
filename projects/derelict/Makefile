@@ -1,5 +1,5 @@
 export GDK ?= /opt/toolchains/mars/m68k-elf
-ROM_NAME := hello-map
+ROM_NAME := derelict
 
 # extra include path for the shared common lib (not overwritten by makefile.gen)
 EXTRA_FLAGS := -I../../inc
@@ -10,7 +10,7 @@ override SRC_C += ../../src/Controller.c
 include $(GDK)/makefile.gen
 
 run:
-	kega-fusion out/hello-map.bin
+	kega-fusion out/derelict.bin
 
 dbg:
-	blastem -D out/hello-map.bin
+	wine ~/gens.exe "./out/derelict.bin"

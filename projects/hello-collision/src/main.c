@@ -21,13 +21,13 @@ typedef struct Bounds_ {
     f16 w, h;
 } Bounds;
 
-typedef struct player_ {
+typedef struct GO_ {
     Sprite *spr;
     u8 heading;
     Vect2D_f32 pos;
     Vect2D_f32 prev;
     Bounds bounds;
-} Player;
+} GameObject;
 
 static void init();
 static void update();
@@ -37,7 +37,7 @@ static bool updatePlayer();
 static void checkCollision();
 static void logPositions();
 
-static Player player = {0};
+static GameObject player = {0};
 static Controller controller = {0};
 static Bounds box = {0};
 static u16 ind = TILE_USER_INDEX;
@@ -152,10 +152,8 @@ static bool overlap() {
     const f32 pbW = FIX32(player.bounds.w);
     const f32 pbH = FIX32(player.bounds.h);
 
-    return (pbX < (box.x + FIX32(box.w))) &
-           ((pbX + pbW) > box.x) &
-           (pbY < (box.y + FIX32(box.h))) &
-           ((pbY + pbH) > box.y);
+    return pbX < box.x + FIX32(box.w) && pbX + pbW > box.x &&
+           pbY < box.y + FIX32(box.h) && pbY + pbH > box.y;
 }
 
 static void resolveCollision() {
@@ -168,13 +166,13 @@ static void resolveCollision() {
     const f32 rightBottom = box.y + F32(box.h);
     const f32 boxRight = box.x + F32(box.w);
 
-    if (right >= box.x & oldRight <= box.x) {   // From left
+    if (right >= box.x && oldRight <= box.x) {   // From left
         player.pos.x = (box.x - F32(PLAYER_W));
-    } else if (player.bounds.x <= boxRight & old_x >= boxRight) { // From right
+    } else if (player.bounds.x <= boxRight && old_x >= boxRight) { // From right
         player.pos.x = boxRight - diff;
-    } if (bottom >= box.y & oldBottom <= box.y) {
+    } if (bottom >= box.y && oldBottom <= box.y) {
         player.pos.y = (box.y - F32(player.bounds.h)) - diff;
-    } else if (player.bounds.y <= rightBottom & old_y >= rightBottom) {
+    } else if (player.bounds.y <= rightBottom && old_y >= rightBottom) {
         player.pos.y = rightBottom - diff;
     }
 

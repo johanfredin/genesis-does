@@ -28,4 +28,9 @@ add_executable(
         projects/hello-collision/src/main.c
         projects/hello-tiled/src/main.c
         projects/hello-tiled-with-collision/src/main.c
+        projects/derelict/src/Entity.c
+        projects/derelict/src/Entity.h
+        projects/derelict/src/Collision.c
+        projects/derelict/src/Collision.h
+        projects/derelict/src/Globals.h
 )
