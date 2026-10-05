@@ -63,6 +63,7 @@ void Entity_collideStatic(Entity *e, const CollisionBox *box) {
 }
 
 static void updatePlayer(Entity *player) {
+    // player->vel.x = player->vel.y = 0;
     if (Controller_changed(&controller)) {
         const Vect2D_ff32 prev = player->pos;
         if (controller.up) {

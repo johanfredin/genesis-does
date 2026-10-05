@@ -1,8 +1,7 @@
-#include "../res/resources.h"
 #include "Controller.h"
 #include "Entity.h"
 #include "Globals.h"
-
+#include "../res/resources.h"
 #define SCREEN_WIDTH 320
 #define SCREEN_HEIGHT 224
 
@@ -13,6 +12,8 @@ static Vect2D_f16 camera = {0};
 static Map *mapBg = nullptr;
 static Map *mapFg = nullptr;
 static Entity player = {0};
+
+static CollisionBox hardBlocks[2] = {0};
 
 Controller controller = {0};
 
@@ -50,9 +51,15 @@ static void init() {
         TILE_ATTR(PAL2, 0, 0, 0),
         SCREEN_WIDTH >> 1,
         SCREEN_HEIGHT >> 1,
-        (CollisionBox){.x = FF32(2), .y = FF32(2), .w = FF32(2), .h = FF32(0)},
-        FF32(6.5)
+        (CollisionBox){.x = FF32(0), .y = FF32(0), .w = FF32(0), .h = FF32(0)},
+        FF32(2.2)
     );
+
+    // Init collisionboxes
+    for (int i = 0; i < 2; i++) {
+        hardBlocks[i] = tmx_toWorldBox(obj_hardblock[i]);
+    }
+
     VDP_setScrollingMode(HSCROLL_PLANE, VSCROLL_PLANE);
     updateCamera();
 }
@@ -77,7 +84,9 @@ int main(bool b) {
     while (TRUE) {
         Controller_getState(JOY_1, &controller);
         Entity_update(&player);
-
+        for (size_t i = 0; i < 2; i++) {
+            Entity_collideStatic(&player, &hardBlocks[i]);
+        }
         updateCamera();
         Entity_render(&player);
 

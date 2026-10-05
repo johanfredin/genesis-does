@@ -13,5 +13,7 @@ extern const Palette palette_bg_jungle3;
 extern const Palette palette_fg_jungle3;
 extern const SpriteDefinition spr_cat;
 extern const TileMap tilemap_collision;
+extern const TMX_HardBlock* obj_hardblock[2];
+extern const TMX_Platform* obj_platform[3];
 
 #endif // _RES_RESOURCES_H_

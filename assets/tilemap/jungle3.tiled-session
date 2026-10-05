@@ -50,7 +50,7 @@
                 3
             ],
             "scale": 1.6439453124999999,
-            "selectedLayer": 3,
+            "selectedLayer": 2,
             "viewCenter": {
                 "x": 95.80610668884401,
                 "y": 472.03516692408226
@@ -58,13 +58,14 @@
         },
         "jungle3_8x8.tmx": {
             "expandedObjectLayers": [
+                9,
                 8
             ],
             "scale": 4,
-            "selectedLayer": 3,
+            "selectedLayer": 2,
             "viewCenter": {
-                "x": 151.875,
-                "y": 180
+                "x": 125.875,
+                "y": 138
             }
         },
         "sky_bg.tsx": {
@@ -86,18 +87,18 @@
     "map.tileWidth": 8,
     "openFiles": [
         "jungle3_8x8.tmx",
-        "/home/johan/IdeaProjects/private/genesis-does/assets/tilesets/ts_col.tsx"
+        "jungle2.tmx"
     ],
     "project": "jungle3.tiled-project",
     "property.type": "bool",
     "recentFiles": [
-        "/home/johan/IdeaProjects/private/genesis-does/assets/tilesets/ts_col.tsx",
-        "jungle3_8x8.tmx",
-        "jungle.tmx",
         "jungle2.tmx",
-        "sky_bg.tsx",
+        "jungle3_8x8.tmx",
+        "/home/johan/IdeaProjects/private/genesis-does/assets/tilesets/ts_col.tsx",
         "ts_jungle.tsx",
         "ts_jungle2.tsx",
+        "jungle.tmx",
+        "sky_bg.tsx",
         "/home/johan/IdeaProjects/SGDK/sample/tiled/tmx-map/res/levels/map.tmx",
         "/home/johan/IdeaProjects/private/genesis-does/assets/tilesets/jungle3_fg.tsx",
         "/home/johan/IdeaProjects/private/genesis-does/assets/tilesets/jungle3_bg.tsx"
