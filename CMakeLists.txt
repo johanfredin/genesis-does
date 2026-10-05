@@ -33,4 +33,5 @@ add_executable(
         projects/derelict/src/Collision.c
         projects/derelict/src/Collision.h
         projects/derelict/src/Globals.h
+        projects/derelict/src/Logger.h
 )

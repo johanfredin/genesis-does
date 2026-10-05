@@ -6,6 +6,7 @@
 
 #include "Collision.h"
 #include "Globals.h"
+#include "Log.h"
 
 static void updatePlayer(Entity *player);
 static void decYPos(Entity *p);
@@ -28,7 +29,7 @@ void Entity_init(
     entity->vel = (Vect2D_ff32) {.x = vel, .y = vel};
     entity->hitBox = hitBox;
     entity->sprite = SPR_addSprite(sprDef, x, y, sprAttr);
-
+    LOG_info("Player created");
 }
 
 void Entity_update(Entity *entity) {

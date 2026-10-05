@@ -10,7 +10,7 @@ override SRC_C += ../../src/Controller.c
 include $(GDK)/makefile.gen
 
 run:
-	kega-fusion out/derelict.bin
+	blastem out/derelict.bin
 
 dbg:
 	wine ~/gens.exe "./out/derelict.bin"
