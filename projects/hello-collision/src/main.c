@@ -24,23 +24,48 @@ typedef struct GO_ {
 } GameObject;
 
 static void init();
-
 static void update();
-
 static void initPlayer(u16 palette, u16 prio, u16 boundXIndent, u16 boundYIndent, u16 w, u16 h);
-
 static void uploadSolidTile(u16 palette, u16 color);
-
-static bool updatePlayer();
-
-static void checkCollision();
-
+static void updatePlayer();
 static void logPositions();
 
 static GameObject player = {0};
 static Controller controller = {0};
 static Box box = {0};
 static u16 ind = TILE_USER_INDEX;
+
+static const ff32 vel = FASTFIX32(4.5f);
+
+static bool overlap() {
+    const s16 px = FF32_toInt(player.pos.x);
+    const s16 py = FF32_toInt(player.pos.y);
+
+    return px < (box.x + box.w) && px + player.w > box.x &&
+           py < (box.y + box.h) && py + player.h > box.y;
+}
+
+static void resolveXCollision() {
+    const s16 prevX = FF32_toInt(player.prev.x);
+    const s16 px = FF32_toInt(player.pos.x);
+    if (px + player.w >= box.x && prevX + player.w <= box.x) {
+        // From left
+        player.pos.x = FF32(box.x - player.w);
+    } else if (px <= (box.x + box.w) && prevX >= (box.x + box.w)) {
+        // From right
+        player.pos.x = FF32(box.x + box.w);
+    }
+}
+
+static void resolveYCollision() {
+    const s16 prevY = FF32_toInt(player.prev.y);
+    const s16 py = FF32_toInt(player.pos.y);
+    if (py + player.h >= box.y && prevY + player.h <= box.y) {
+        player.pos.y = FF32(box.y - player.h);
+    } else if (py <= box.y + box.h && prevY >= box.y + box.h) {
+        player.pos.y = FF32(box.y + box.h);
+    }
+}
 
 static void init() {
     SPR_init();
@@ -88,103 +113,57 @@ static void uploadSolidTile(const u16 palette, const u16 color) {
     PAL_setColor(palette + 1, color);
 
     // index +1 - matches the tile's pixel data, index 0 stays the shared background slot
-    VDP_fillTileMapRect(BG_A, TILE_ATTR_FULL(palette, 0, 0, 0, ind), box.x >> 3, box.y >> 3, box.w >> 3, box.h >> 3);
+    VDP_fillTileMapRect(BG_A, TILE_ATTR_FULL(palette, 1, 0, 0, ind), box.x >> 3, box.y >> 3, box.w >> 3, box.h >> 3);
     ind += TILE_USER_INDEX;
 }
 
 static void update() {
-    if (updatePlayer()) {
-        checkCollision();
-    }
+    updatePlayer();
     SPR_setPosition(player.spr, FF32_toInt(player.pos.x) - player.indentX, FF32_toInt(player.pos.y) - player.indentY);
     SPR_update();
 }
 
-static bool updatePlayer() {
-    static const ff32 vel = FASTFIX32(4.5f);
+static void updatePlayer() {
     Controller_getState(JOY_1, &controller);
-    if (Controller_dpadChanged(&controller)) {
-        player.prev = player.pos;
+    player.prev = player.pos;
 
-        if (controller.up) {
-            player.pos.y -= vel;
-        } else if (controller.down) {
-            player.pos.y += vel;
-        }
-
-        if (controller.left) {
-            player.pos.x -= vel;
-        } else if (controller.right) {
-            player.pos.x += vel;
-        }
-        return TRUE;
+    // Check X
+    if (controller.left) {
+        player.pos.x -= vel;
+        SPR_setHFlip(player.spr, TRUE);
+    } else if (controller.right) {
+        player.pos.x += vel;
+        SPR_setHFlip(player.spr, FALSE);
     }
-    return FALSE;
-}
-
-
-static bool overlap() {
-    const ff32 pbX = player.pos.x;
-    const ff32 pbY = player.pos.y;
-    const ff32 pbW = FF32(player.w);
-    const ff32 pbH = FF32(player.h);
-
-    return pbX < FF32(box.x + box.w) && pbX + pbW > FF32(box.x) &&
-           pbY < FF32(box.y + box.h) && pbY + pbH > FF32(box.y);
-}
-
-static void resolveCollision() {
-#define old_x (player.prev.x)
-#define old_y (player.prev.y)
-#define right (player.pos.x + FF32(player.w))
-#define oldRight (player.prev.x + FF32(player.w))
-#define bottom (player.pos.y + FF32(player.h))
-#define oldBottom (player.prev.y + FF32(player.h))
-#define rightBottom (FF32(box.y + box.h))
-#define boxRight (FF32(box.x + box.w))
-
-    if (right >= FF32(box.x) && oldRight <= FF32(box.x)) {
-        // From left
-        player.pos.x = FF32(box.x - player.w);
-    } else if (player.pos.x <= boxRight && old_x >= boxRight) {
-        // From right
-        player.pos.x = boxRight;
-    }
-    if (bottom >= FF32(box.y) && oldBottom <= FF32(box.y)) {
-        player.pos.y = FF32(box.y - player.h);
-    } else if (player.pos.y <= rightBottom && old_y >= rightBottom) {
-        player.pos.y = rightBottom;
-    }
-
-#undef old_x
-#undef old_y
-#undef right
-#undef oldRight
-#undef bottom
-#undef oldBottom
-#undef rightBottom
-#undef boxRight
-}
-
-static void checkCollision() {
     if (overlap()) {
         VDP_drawTextBG(BG_A, "COLLISION", 1, 5);
-        resolveCollision();
-    } else {
-        VDP_clearText(1, 5, 9);
+    }
+
+    // Check Y
+    if (controller.up) {
+        player.pos.y -= vel;
+    } else if (controller.down) {
+        player.pos.y += vel;
+    }
+    if (overlap()) {
+        resolveYCollision();
     }
 }
+
 
 static void logPositions() {
     char pos_buf[32] = {0};
     char prev_buf[32] = {0};
+    char tile_buf[32] = {0};
     sprintf(pos_buf, "x:%d, y:%d", FF32_toInt(player.pos.x), FF32_toInt(player.pos.y));
     sprintf(prev_buf, "px:%d, py:%d", FF32_toInt(player.prev.x), FF32_toInt(player.prev.y));
+    sprintf(tile_buf, "tx:%d, ty:%d", FF32_toInt(player.pos.x) >> 3, FF32_toInt(player.pos.y) >> 3);
     VDP_drawTextBG(BG_A, pos_buf, 1, 2);
     VDP_drawTextBG(BG_A, prev_buf, 1, 4);
+    VDP_drawTextBG(BG_A, tile_buf, 1, 6);
 }
 
-int main(bool bool_) {
+int main(bool bool_){
     init();
     while (TRUE) {
         update();

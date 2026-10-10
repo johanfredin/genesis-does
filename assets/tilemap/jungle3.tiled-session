@@ -52,20 +52,20 @@
             "scale": 1.6439453124999999,
             "selectedLayer": 2,
             "viewCenter": {
-                "x": 95.80610668884401,
-                "y": 472.03516692408226
+                "x": 512.4866341927053,
+                "y": 256.09124391113227
             }
         },
         "jungle3_8x8.tmx": {
             "expandedObjectLayers": [
-                9,
-                8
+                8,
+                9
             ],
             "scale": 4,
             "selectedLayer": 2,
             "viewCenter": {
-                "x": 125.875,
-                "y": 138
+                "x": 164.875,
+                "y": 156
             }
         },
         "sky_bg.tsx": {
@@ -90,7 +90,7 @@
         "jungle2.tmx"
     ],
     "project": "jungle3.tiled-project",
-    "property.type": "bool",
+    "property.type": "string",
     "recentFiles": [
         "jungle2.tmx",
         "jungle3_8x8.tmx",
