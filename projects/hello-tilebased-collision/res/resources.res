@@ -1,0 +1,1 @@
+SPRITE spr_def_juan "../../../assets/spr/cool-cat-filled.png" 6 6 FAST

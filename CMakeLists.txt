@@ -25,13 +25,14 @@ add_executable(
         projects/hello-controller/src/main.c
         projects/hello-camera/src/main.c
         projects/hello-map/src/main.c
-        projects/hello-collision/src/main.c
+        projects/hello-object-collision/src/main.c
         projects/hello-tiled/src/main.c
-        projects/hello-tiled-with-collision/src/main.c
         projects/derelict/src/Entity.c
         projects/derelict/src/Entity.h
         projects/derelict/src/Collision.c
         projects/derelict/src/Collision.h
         projects/derelict/src/Globals.h
-        projects/derelict/src/Logger.h
+        projects/derelict/src/Log.h
+        projects/hello-tilebased-collision/src/grid.h
+        projects/hello-tilebased-collision/src/grid.h
 )

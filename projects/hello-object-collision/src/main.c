@@ -136,7 +136,7 @@ static void updatePlayer() {
         SPR_setHFlip(player.spr, FALSE);
     }
     if (overlap()) {
-        VDP_drawTextBG(BG_A, "COLLISION", 1, 5);
+        resolveXCollision();
     }
 
     // Check Y

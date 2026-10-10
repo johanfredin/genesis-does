@@ -10,8 +10,8 @@ const ROMHeader rom_header = {
     "SEGA MEGA DRIVE ",
 #endif
     "(C)SGDK 2024    ",
-    "Hello Collision                                  ",
-    "Hello Collision                                  ",
+    "Hello TileBased Collision                       ",
+    "Hello TileBased Collision                       ",
     "GM 00000000-00",
     0x000,
     "JD              ",
@@ -28,6 +28,6 @@ const ROMHeader rom_header = {
     0x00200000,
     0x0020FFFF,
     "            ",
-    "DEMONSTRATION PROGRAM                   ",
+    "DEMONSTRATION PROGRAM                  ",
     "JUE             "
 };
