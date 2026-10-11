@@ -10,4 +10,5 @@ override SRC_C += ../../src/Controller.c
 include $(GDK)/makefile.gen
 
 run:
-	kega-fusion out/hello-tilebased-collision.bin
+	blastem out/hello-tilebased-collision.bin
+	#kega-fusion out/hello-tilebased-collision.bin
