@@ -219,10 +219,12 @@ static void logPositions() {
     char stats[32] = {0};
     sprintf(pos_buf, "x:%-3d, y:%-3d", FF32_toInt(player.pos.x), FF32_toInt(player.pos.y));
     sprintf(vel_buf, "vx:%-3d, vy:%-3d", FF32_toInt(player.vel.x), FF32_toInt(player.vel.y));
-    sprintf(stats, "on_ground: %d", player.onGround);
+    sprintf(stats, "on_ground: %-2d", player.onGround);
     VDP_drawTextBG(BG_A, pos_buf, 1, 2);
     VDP_drawTextBG(BG_A, vel_buf, 1, 3);
-    VDP_drawTextBG(BG_A, stats, 1, 4);
+    if (player.onGround) {
+        VDP_drawTextBG(BG_A, stats, 1, 4);
+    }
 }
 
 int main(bool bool_) {

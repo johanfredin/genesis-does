@@ -4,7 +4,6 @@
 
 #include "Entity.h"
 
-#include "Collision.h"
 #include "Globals.h"
 #include "Log.h"
 
@@ -21,13 +20,11 @@ void Entity_init(
     const u16 sprAttr,
     const s16 x,
     const s16 y,
-    const CollisionBox hitBox,
     const ff32 vel
 ) {
     entity->type = type;
     entity->pos = entity->prev = (Vect2D_ff32){.x = FF32_fromInt(x), .y = FF32_fromInt(y)};
     entity->vel = (Vect2D_ff32) {.x = vel, .y = vel};
-    entity->hitBox = hitBox;
     entity->sprite = SPR_addSprite(sprDef, x, y, sprAttr);
     LOG_info("Player created");
 }
@@ -51,16 +48,6 @@ void Entity_render(const Entity *entity) {
 
 void Entity_destroy(const Entity *const entity) {
     SPR_releaseSprite(entity->sprite);
-}
-
-void Entity_collideStatic(Entity *e, const CollisionBox *box) {
-    const CollisionBox curr = Entity_worldBox(e, e->pos);
-    const CollisionBox prev = Entity_worldBox(e, e->prev);
-    if (Collision_detect(&curr, box)) {
-        const Vect2D_ff32 push = Collision_resolveStatic(&curr, &prev, box);
-        e->pos.x += push.x;
-        e->pos.y += push.y;
-    }
 }
 
 static void updatePlayer(Entity *player) {
