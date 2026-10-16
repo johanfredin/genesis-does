@@ -1,14 +1,9 @@
+#include "../res/resources.h"
 #include "Controller.h"
 #include "Entity.h"
 #include "Globals.h"
-#include "../res/resources.h"
-#define SCREEN_WIDTH 320
-#define SCREEN_HEIGHT 224
 
-#define MAP_WIDTH 480
-#define MAP_HEIGHT 340
-
-static Vect2D_f16 camera = {0};
+Vect2D_s16 camera = {0};
 static Map *mapBg = nullptr;
 static Map *mapFg = nullptr;
 static Entity player = {0};
@@ -47,33 +42,44 @@ static void init() {
         &spr_cat,
         TILE_ATTR(PAL2, 0, 0, 0),
         SCREEN_WIDTH >> 1,
-        SCREEN_HEIGHT >> 1,
-        FF32(2.2)
+        200,
+        16,
+        16,
+        16,
+        32,
+        FF32(2.2f)
     );
 
     VDP_setScrollingMode(HSCROLL_PLANE, VSCROLL_PLANE);
     updateCamera();
+    SYS_doVBlankProcess();
+
+    // play a funky tune
+    XGM2_play(music);
 }
 
 static void updateCamera() {
-    const s32 pX = FF32_toInt(player.pos.x);
-    const s32 pY = FF32_toInt(player.pos.y);
+    camera.x = FF32_toInt(player.pos.x) + (player.w >> 1) - (SCREEN_WIDTH >> 1);
+    camera.y = FF32_toInt(player.pos.y) + (player.w >> 1) - (SCREEN_HEIGHT >> 1);
 
-    camera.x = clamp(pX - (SCREEN_WIDTH >> 1), 0, MAP_WIDTH - SCREEN_WIDTH);
-    camera.y = clamp(pY - (SCREEN_HEIGHT >> 1), 0, MAP_HEIGHT - SCREEN_HEIGHT);
+    if (camera.x < 0) {
+        camera.x = 0;
+    } else if (camera.x >= MAP_WIDTH - SCREEN_WIDTH) {
+        camera.x = MAP_WIDTH - SCREEN_WIDTH;
+    }
+    if (camera.y < 0) {
+        camera.y = 0;
+    } else if (camera.y >= MAP_HEIGHT - SCREEN_HEIGHT) {
+        camera.y = MAP_HEIGHT - SCREEN_HEIGHT;
+    }
 
-    MAP_scrollTo(mapBg, camera.x >> 2, camera.y >> 2);
+    MAP_scrollTo(mapBg, camera.x >> 2, camera.y >> 3);
     MAP_scrollTo(mapFg, camera.x, camera.y);
 }
 
 int main(bool b) {
-    if (!b) {
-        SYS_hardReset();
-    }
-
     init();
     while (TRUE) {
-        Controller_getState(JOY_1, &controller);
         Entity_update(&player);
         updateCamera();
         Entity_render(&player);

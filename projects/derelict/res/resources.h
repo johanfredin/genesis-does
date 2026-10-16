@@ -3,6 +3,9 @@
 #ifndef _RES_RESOURCES_H_
 #define _RES_RESOURCES_H_
 
+extern const u8 sfx_jump[5888];
+extern const u8 sfx_die[7936];
+extern const u8 music[8704];
 extern const TileSet tileset_bg_jungle3;
 extern const TileSet tileset_fg_jungle3;
 extern const TileSet map_bg_jungle3_tileset0;

@@ -209,7 +209,6 @@ static void updatePlayer() {
         player.pos.x = FF32(123);
         XGM2_playPCM(sfx_die, sizeof(sfx_die), SOUND_PCM_CH2);
     }
-
 }
 
 
