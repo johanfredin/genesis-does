@@ -41,8 +41,8 @@ static void init() {
         PLAYER,
         &spr_cat,
         TILE_ATTR(PAL2, 0, 0, 0),
-        SCREEN_WIDTH >> 1,
-        200,
+        170,
+        190,
         16,
         16,
         16,
@@ -51,6 +51,8 @@ static void init() {
     );
 
     VDP_setScrollingMode(HSCROLL_PLANE, VSCROLL_PLANE);
+    VDP_setWindowVPos(FALSE, 2);
+
     updateCamera();
     SYS_doVBlankProcess();
 
@@ -83,6 +85,7 @@ int main(bool b) {
         Entity_update(&player);
         updateCamera();
         Entity_render(&player);
+        VDP_drawTextBGFill(WINDOW, "Julies cat is cool!", 1, 1, 32);
 
         SPR_update();
         SYS_doVBlankProcess();

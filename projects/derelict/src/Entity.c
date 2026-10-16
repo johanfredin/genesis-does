@@ -7,13 +7,22 @@
 #include "Log.h"
 #include "../res/resources.h"
 
+// The amount to shift by given the tile size (8 == shift by 3, 16 by 4 etc)
+#define ENTITY_TILE_SHIFT 3
+#define ENTITY_TO_TILE_SIZE(n) ((n) >> ENTITY_TILE_SHIFT)
+#define ENTITY_FROM_TILE_SIZE(n) ((n) << ENTITY_TILE_SHIFT)
+
+#define BLOCK_SOFT 1
+#define BLOCK_LADDER 2
+#define BLOCK_SOLID 3
+
 static const ff32 PLAYER_SPEED = FF32(3.2f);
 
 static void updatePlayer(Entity *player);
 static void setNewXPos(Entity *entity);
 static void setNewYPos(Entity *entity);
-static bool isSolidCol(s16 tx, s16 tyTop, s16 tyBottom);
-static bool isSolidRow(s16 ty, s16 txLeft, s16 txRight);
+static u16 isCollisionCol(s16 tx, s16 tyTop, s16 tyBottom);
+static u16 isCollisionRow(s16 ty, s16 txLeft, s16 txRight);
 
 void Entity_init(
     Entity *entity,
@@ -108,10 +117,11 @@ static void updatePlayer(Entity *player) {
 
     // Safeguard
     if (player->pos.y > FF32(MAP_HEIGHT)) {
-        player->pos.y = FF32(SCREEN_WIDTH >> 1);
-        player->pos.x = FF32(200);
+        player->pos.x = FF32(160);
+        player->pos.y = FF32(190);
         XGM2_playPCM(sfx_die, sizeof(sfx_die), SOUND_PCM_CH2);
     }
+
 }
 
 static void setNewXPos(Entity *entity) {
@@ -122,22 +132,22 @@ static void setNewXPos(Entity *entity) {
     // Convert to tile positions
     const s16 x = FF32_toInt(entity->pos.x);
     const s16 y = FF32_toInt(entity->pos.y);
-    const s16 tyTop = y >> 4;
-    const s16 tyBottom = (y + entity->h - 1) >> 4;
+    const s16 tyTop = ENTITY_TO_TILE_SIZE(y);
+    const s16 tyBottom = ENTITY_TO_TILE_SIZE(y + entity->h - 1);
 
     // Check for and resolve potential collision on the X axis
     if (ENTITY_HEADING_RIGHT(entity->vel.x)) {
         // Resolve collision on the right edge
-        const s16 txRightEdge = (x + entity->w - 1) >> 4;
-        if (isSolidCol(txRightEdge, tyTop, tyBottom)) {
-            entity->pos.x = FF32((txRightEdge << 4) - entity->w);
+        const s16 txRightEdge = ENTITY_TO_TILE_SIZE(x + entity->w - 1);
+        if (isCollisionCol(txRightEdge, tyTop, tyBottom) == BLOCK_SOLID) {
+            entity->pos.x = FF32(ENTITY_FROM_TILE_SIZE(txRightEdge) - entity->w);
             entity->anim = ENTITY_ANIM_IDLE;
         }
     } else {
         // Resolve collision on the LEFT edge
-        const s16 txLeftEdge = x >> 4;
-        if (isSolidCol(txLeftEdge, tyTop, tyBottom)) {
-            entity->pos.x = FF32((txLeftEdge + 1) << 4);
+        const s16 txLeftEdge = ENTITY_TO_TILE_SIZE(x);
+        if (isCollisionCol(txLeftEdge, tyTop, tyBottom) == BLOCK_SOLID) {
+            entity->pos.x = FF32(ENTITY_FROM_TILE_SIZE(txLeftEdge + 1));
             entity->anim = ENTITY_ANIM_IDLE;
         }
     }
@@ -150,15 +160,16 @@ static void setNewYPos(Entity *entity) {
     // Convert to tile positions
     const s16 x = FF32_toInt(entity->pos.x);
     const s16 y = FF32_toInt(entity->pos.y);
-    const s16 txLeft = x >> 4;
-    const s16 txRight = (x + entity->w - 1) >> 4;
+    const s16 txLeft = ENTITY_TO_TILE_SIZE(x);
+    const s16 txRight = ENTITY_TO_TILE_SIZE(x + entity->w - 1);
 
     // Check for and resolve potential collision on the X axis
     if (ENTITY_HEADING_DOWN(entity->vel.y)) {
         // Resolve collision on the BOTTOM edge
-        const s16 tyBottom = (y + entity->h - 1) >> 4;
-        if (isSolidRow(tyBottom, txLeft, txRight)) {
-            entity->pos.y = FF32((tyBottom << 4) - entity->h);
+        const s16 tyBottom = ENTITY_TO_TILE_SIZE(y + entity->h - 1);
+        const u16 collision = isCollisionRow(tyBottom, txLeft, txRight);
+        if (collision && collision != BLOCK_LADDER) {
+            entity->pos.y = FF32(ENTITY_FROM_TILE_SIZE(tyBottom) - entity->h);
             entity->onGround = true;
             entity->vel.y = 0;
         } else {
@@ -166,29 +177,33 @@ static void setNewYPos(Entity *entity) {
         }
     } else {
         // Resolve collision on the TOP edge
-        const s16 tyTopEdge = y >> 4;
-        if (isSolidRow(tyTopEdge, txLeft, txRight)) {
-            entity->pos.y = FF32((tyTopEdge + 1) << 4);
+        const s16 tyTopEdge = ENTITY_TO_TILE_SIZE(y);
+        const u16 collision = isCollisionRow(tyTopEdge, txLeft, txRight);
+        // Only resolve on solid block (subject to change)
+        if (collision == BLOCK_SOLID) {
+            entity->pos.y = FF32(ENTITY_FROM_TILE_SIZE(tyTopEdge + 1));
         }
     }
 }
 
-static bool isSolidCol(const s16 tx, const s16 tyTop, const s16 tyBottom) {
+static u16 isCollisionCol(const s16 tx, const s16 tyTop, const s16 tyBottom) {
     for (s16 ty = tyTop; ty <= tyBottom; ty++) {
-        if (ty*2 > 0 && ty*2 < tilemap_collision.h && tx*2 > 0 && tx*2 < tilemap_collision.w) {
-            if (tilemap_collision.tilemap[((tilemap_collision.w*2) * ty) + tx*2]) {
-                return true;
+        if (ty > 0 && ty < tilemap_collision.h && tx > 0 && tx < tilemap_collision.w) {
+            const u16 collision_tile = tilemap_collision.tilemap[(tilemap_collision.w * ty) + tx];
+            if (collision_tile) {
+                return collision_tile;
             }
         }
     }
     return false;
 }
 
-static bool isSolidRow(const s16 ty, const s16 txLeft, const s16 txRight) {
+static u16 isCollisionRow(const s16 ty, const s16 txLeft, const s16 txRight) {
     for (s16 tx = txLeft; tx <= txRight; tx++) {
-        if (tx*2 > 0 && tx*2 < tilemap_collision.w && ty*2 > 0 && ty*2 < tilemap_collision.h) {
-            if (tilemap_collision.tilemap[((tilemap_collision.w*2) * ty) + tx*2]) {
-                return true;
+        if (tx > 0 && tx < tilemap_collision.w && ty > 0 && ty < tilemap_collision.h) {
+            const u16 collision_tile = tilemap_collision.tilemap[(tilemap_collision.w * ty) + tx];
+            if (collision_tile) {
+                return collision_tile;
             }
         }
     }
