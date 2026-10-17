@@ -1,0 +1,23 @@
+SOLVED:
+-------
+* tile collision
+* 8px tiles
+* basic jump
+* soft/hard blocks
+* soundfx
+* music
+* tile priority
+
+
+TODO:
+-----
+* Proper controller callback. Ability to detect button released
+* Dynamic jump height. Simple touch small jump. Button held = higher jump
+* Jump animation
+* New tilesets
+* Project structure
+* Enemies/Enemy AI
+* Menus
+* HUD window
+* Load/Offload levels
+* What is this game even about? :)
