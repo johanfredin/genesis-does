@@ -92,22 +92,21 @@ static void init(void) {
 
 static bool updatePlayer(void) {
     static const fix16 vel = FIX32(4.5f);
-    Controller_getState(JOY_1, &controller);
-
-    if (Controller_dpadChanged(&controller)) {
+    Controller_poll(&controller, JOY_1);
+    if (Controller_poll(&controller, JOY_1)) {
         fix32 x = FIX32(player.pos.x);
         fix32 y = FIX32(player.pos.y);
 
-        if (controller.up) {
+        if (Controller_isHeld(&controller, BUTTON_UP)) {
             y -= vel;
-        } else if (controller.down) {
+        } else if (Controller_isHeld(&controller, BUTTON_DOWN)) {
             y += vel;
         }
 
-        if (controller.left) {
+        if (Controller_isHeld(&controller, BUTTON_LEFT)) {
             x -= vel;
             SPR_setHFlip(player.spr, true);
-        } else if (controller.right) {
+        } else if (Controller_isHeld(&controller, BUTTON_RIGHT)) {
             x += vel;
             SPR_setHFlip(player.spr, false);
         }

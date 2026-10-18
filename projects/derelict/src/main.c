@@ -85,7 +85,10 @@ int main(bool b) {
         Entity_update(&player);
         updateCamera();
         Entity_render(&player);
-        VDP_drawTextBGFill(WINDOW, "Julies cat is cool!", 1, 1, 32);
+
+        static char buff[32] = {0};
+        sprintf(buff, "Julies game, on ground=%d", player.onGround);
+        VDP_drawTextBGFill(WINDOW, buff, 1, 1, 32);
 
         SPR_update();
         SYS_doVBlankProcess();

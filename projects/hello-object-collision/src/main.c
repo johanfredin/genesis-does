@@ -124,7 +124,7 @@ static void update() {
 }
 
 static void updatePlayer() {
-    Controller_getState(JOY_1, &controller);
+    Controller_poll(JOY_1, &controller);
     player.prev = player.pos;
 
     // Check X

@@ -5,21 +5,32 @@
 #ifndef GENESIS_DOES_CONTROLLER_H
 #define GENESIS_DOES_CONTROLLER_H
 #include <types.h>
+#include <joy.h>
 
 typedef struct Controller_ {
-    bool up: 1;
-    bool down: 1;
-    bool left: 1;
-    bool right: 1;
-    bool start: 1;
-    bool a: 1;
-    bool b: 1;
-    bool c: 1;
+    u16 current;
+    u16 previous;
 } Controller;
 
 void Controller_init();
-void Controller_getState(u16 port, Controller *controller);
-bool Controller_changed(const Controller *controller);
-bool Controller_dpadChanged(const Controller *controller);
+
+static inline u16 Controller_poll(Controller *const controller, const u16 port) {
+    controller->previous = controller->current;
+    controller->current = JOY_readJoypad(port);
+    return controller->current;
+}
+
+static inline bool Controller_isHeld(const Controller *const controller, const u16 button) {
+    return controller->current & button;
+}
+
+static inline bool Controller_wasPressed(const Controller *const controller, const u16 button) {
+    return controller->current & button && !(controller->previous & button);
+}
+
+static inline bool Controller_wasReleased(const Controller *const controller, const u16 button) {
+    return controller->previous & button && !(controller->current & button);
+}
+
 
 #endif //GENESIS_DOES_CONTROLLER_H

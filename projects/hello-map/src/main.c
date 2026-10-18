@@ -56,7 +56,7 @@ static void init(void) {
 
 static bool updatePlayer(void) {
     static const fix16 vel = FIX32(4.5f);
-    Controller_getState(JOY_1, &controller);
+    Controller_poll(JOY_1, &controller);
 
     if (Controller_dpadChanged(&controller)) {
         fix32 x = FIX32(player.pos.x);

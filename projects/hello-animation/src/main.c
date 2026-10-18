@@ -10,10 +10,10 @@
 #define HEADING_LEFT 0
 #define HEADING_RIGHT 1
 
-static Sprite *player = NULL;
+static Sprite *player = nullptr;
 static Controller controller = {0};
 
-static void init(void) {
+static void init() {
     SPR_init();
     PAL_setPalette(PAL2, spr_def_juan.palette->data, DMA);
     JOY_init();
@@ -27,26 +27,25 @@ static void init(void) {
     VDP_drawText("Hello animated sprite!", 1, 1);
 }
 
-static void update(void) {
+static void update() {
     static s16 anim = 0;
     static const fix16 vel = FIX16(3.5f);
     fix16 x = FIX16(SPR_getPositionX(player));
     fix16 y = FIX16(SPR_getPositionY(player));
-    Controller_getState(JOY_1, &controller);
-    if (Controller_dpadChanged(&controller)) {
-
-        if (controller.up) {
+    if (Controller_poll(&controller, JOY_1)) {
+        if (Controller_isHeld(&controller, BUTTON_UP)) {
             y -= vel;
-        } else if (controller.down) {
+        } else if (Controller_isHeld(&controller, BUTTON_DOWN)) {
             y += vel;
         }
-        if (controller.left) {
+        if (Controller_isHeld(&controller, BUTTON_LEFT)) {
             x -= vel;
-        } else if (controller.right) {
+            SPR_setHFlip(player, true);
+        } else if (Controller_isHeld(&controller, BUTTON_RIGHT)) {
             x += vel;
+            SPR_setHFlip(player, false);
         }
         anim = ANIM_WALK;
-        SPR_setHFlip(player, controller.left);
         SPR_setPosition(player, F16_toInt(x), F16_toInt(y));
     } else {
         anim = ANIM_IDLE;

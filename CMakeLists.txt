@@ -12,6 +12,7 @@ add_executable(
         genesis_does
 
         # common src files will end up here
+        inc/Controller.h
         src/Controller.c
 
         # Projects
@@ -20,8 +21,6 @@ add_executable(
         projects/hello-dpad-callback/src/main.c
         projects/hello-sprite/src/main.c
         projects/hello-animation/src/main.c
-        inc/Controller.h
-        src/Controller.c
         projects/hello-controller/src/main.c
         projects/hello-camera/src/main.c
         projects/hello-map/src/main.c
@@ -29,10 +28,8 @@ add_executable(
         projects/hello-tiled/src/main.c
         projects/derelict/src/Entity.c
         projects/derelict/src/Entity.h
-        projects/derelict/src/Collision.c
-        projects/derelict/src/Collision.h
         projects/derelict/src/Globals.h
         projects/derelict/src/Log.h
-        projects/hello-tilebased-collision/src/grid.h
-        projects/hello-tilebased-collision/src/grid.h
+        projects/hello-tilebased-collision/src/Grid.h
+        projects/hello-tilebased-collision/src/Grid.c
 )

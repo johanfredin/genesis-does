@@ -76,7 +76,7 @@ void Entity_destroy(const Entity *const entity) {
 }
 
 static void updatePlayer(Entity *player) {
-    Controller_getState(JOY_1, &controller);
+    Controller_poll(&controller, JOY_1);
     // Check X
     player->vel.x = 0;
     player->vel.y += GRAVITY;
@@ -86,10 +86,10 @@ static void updatePlayer(Entity *player) {
 
 
     player->anim = ENTITY_ANIM_IDLE;
-    if (controller.left) {
+    if (Controller_isHeld(&controller, BUTTON_LEFT)) {
         player->vel.x = -PLAYER_SPEED;
         SPR_setHFlip(player->spr, TRUE);
-    } else if (controller.right) {
+    } else if (Controller_isHeld(&controller, BUTTON_RIGHT)) {
         player->vel.x = PLAYER_SPEED;
         SPR_setHFlip(player->spr, FALSE);
     }
@@ -101,12 +101,12 @@ static void updatePlayer(Entity *player) {
     }
 
     // Check Y
-    if (controller.a && player->onGround) {
+    if (Controller_wasPressed(&controller, BUTTON_A) && player->onGround) {
         XGM2_playPCM(sfx_jump, sizeof(sfx_jump), SOUND_PCM_CH2);
         player->vel.y -= player->jumpVel;
         player->onGround = false;
     }
-    if (controller.up) {
+    if (Controller_isHeld(&controller, BUTTON_UP)) {
         player->vel.y = -PLAYER_SPEED;
     }
 
@@ -172,8 +172,6 @@ static void setNewYPos(Entity *entity) {
             entity->pos.y = FF32(ENTITY_FROM_TILE_SIZE(tyBottom) - entity->h);
             entity->onGround = true;
             entity->vel.y = 0;
-        } else {
-            entity->onGround = false;
         }
     } else {
         // Resolve collision on the TOP edge

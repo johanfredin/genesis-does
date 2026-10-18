@@ -164,7 +164,7 @@ static void setNewYPos() {
 }
 
 static void updatePlayer() {
-    Controller_getState(JOY_1, &controller);
+    Controller_poll(&controller, JOY_1);
     // Check X
     player.vel.x = 0;
     player.vel.y += GRAVITY;
@@ -174,10 +174,10 @@ static void updatePlayer() {
 
 
     player.anim = ANIM_IDLE;
-    if (controller.left) {
+    if (Controller_isHeld(&controller, BUTTON_LEFT)) {
         player.vel.x = -SPEED;
         SPR_setHFlip(player.spr, TRUE);
-    } else if (controller.right) {
+    } else if (Controller_isHeld(&controller, BUTTON_RIGHT)) {
         player.vel.x = SPEED;
         SPR_setHFlip(player.spr, FALSE);
     }
@@ -189,12 +189,12 @@ static void updatePlayer() {
     }
 
     // Check Y
-    if (controller.a && player.onGround) {
+    if (Controller_isHeld(&controller, BUTTON_A) && player.onGround) {
         XGM2_playPCM(sfx_jump, sizeof(sfx_jump), SOUND_PCM_CH2);
         player.vel.y -= player.jumpVel;
         player.onGround = false;
     }
-    if (controller.up) {
+    if (Controller_isHeld(&controller, BUTTON_UP)) {
         player.vel.y = -SPEED;
     }
 
