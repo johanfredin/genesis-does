@@ -166,12 +166,14 @@ static void setNewYPos(Entity *entity) {
     // Check for and resolve potential collision on the X axis
     if (ENTITY_HEADING_DOWN(entity->vel.y)) {
         // Resolve collision on the BOTTOM edge
-        const s16 tyBottom = ENTITY_TO_TILE_SIZE(y + entity->h - 1);
+        const s16 tyBottom = ENTITY_TO_TILE_SIZE(y + entity->h);
         const u16 collision = isCollisionRow(tyBottom, txLeft, txRight);
         if (collision && collision != BLOCK_LADDER) {
             entity->pos.y = FF32(ENTITY_FROM_TILE_SIZE(tyBottom) - entity->h);
             entity->onGround = true;
             entity->vel.y = 0;
+        } else {
+            entity->onGround=false;
         }
     } else {
         // Resolve collision on the TOP edge
@@ -179,6 +181,7 @@ static void setNewYPos(Entity *entity) {
         const u16 collision = isCollisionRow(tyTopEdge, txLeft, txRight);
         // Only resolve on solid block (subject to change)
         if (collision == BLOCK_SOLID) {
+            entity->vel.y = 0;
             entity->pos.y = FF32(ENTITY_FROM_TILE_SIZE(tyTopEdge + 1));
         }
     }

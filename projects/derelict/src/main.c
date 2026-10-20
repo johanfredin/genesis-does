@@ -57,7 +57,7 @@ static void init() {
     SYS_doVBlankProcess();
 
     // play a funky tune
-    XGM2_play(music);
+    // XGM2_play(music);
 }
 
 static void updateCamera() {
@@ -87,7 +87,7 @@ int main(bool b) {
         Entity_render(&player);
 
         static char buff[32] = {0};
-        sprintf(buff, "Julies game, on ground=%d", player.onGround);
+        sprintf(buff, "on ground=%d, yVel=%lu", player.onGround, player.vel.y);
         VDP_drawTextBGFill(WINDOW, buff, 1, 1, 32);
 
         SPR_update();

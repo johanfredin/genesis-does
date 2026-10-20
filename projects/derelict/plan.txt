@@ -7,11 +7,10 @@ SOLVED:
 * soundfx
 * music
 * tile priority
-
+* Proper controller callback. Ability to detect button released
 
 TODO:
 -----
-* Proper controller callback. Ability to detect button released
 * Dynamic jump height. Simple touch small jump. Button held = higher jump
 * Jump animation
 * New tilesets

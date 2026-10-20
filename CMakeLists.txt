@@ -21,7 +21,6 @@ add_executable(
         projects/hello-dpad-callback/src/main.c
         projects/hello-sprite/src/main.c
         projects/hello-animation/src/main.c
-        projects/hello-controller/src/main.c
         projects/hello-camera/src/main.c
         projects/hello-map/src/main.c
         projects/hello-object-collision/src/main.c
