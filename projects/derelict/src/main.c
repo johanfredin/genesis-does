@@ -57,7 +57,7 @@ static void init() {
     SYS_doVBlankProcess();
 
     // play a funky tune
-    // XGM2_play(music);
+    XGM2_play(music);
 }
 
 static void updateCamera() {

@@ -86,31 +86,38 @@ static const ff32 MAX_GRAVITY = FF32(6.5f);
 #define JUMP_H      (32 * 2)   // px
 #define JUMP_T      16         // frames to apex (held)
 #define JUMP_T_MIN  6          // NEW: frames to apex (tap)
+#define JUMP_BUFFER_FRAMES 7
 
 #define GRAVITY_F   (2.0f * JUMP_H / (JUMP_T * JUMP_T))           // NEW: float version, reused below
 static const ff32 GRAVITY      = FF32(GRAVITY_F);                // CHANGED: uses GRAVITY_F
 static const ff32 JUMP_VEL     = FF32(2.0f * JUMP_H / JUMP_T);
 static const ff32 JUMP_VEL_MIN = FF32(GRAVITY_F * JUMP_T_MIN);   // NEW: v = g * t
+#define COYOTE_FRAMES 7
+static u8 coyote = 0;
+static u8 jumpBuffer = 0;
 
 // REMOVED: startY, maxY
 
 static void handleJump(Entity *player) {
     // REMOVED: jumpVelMin, jumpVelMax
 
-    if (Controller_wasReleased(&controller, BUTTON_A) && player->jumping) {
-        if (player->vel.y < -JUMP_VEL_MIN) {        // CHANGED: was -JUMP_VEL
-            player->vel.y = -JUMP_VEL_MIN;          // CHANGED: was -JUMP_VEL
-        }
-        player->jumping = false;
+    // Remember a press for a few frames
+    if (Controller_wasPressed(&controller, BUTTON_A)) {
+        jumpBuffer = JUMP_BUFFER_FRAMES;
+    } else if (jumpBuffer) {
+        jumpBuffer--;
     }
 
-    if (Controller_wasPressed(&controller, BUTTON_A) && player->onGround) {
+    if (jumpBuffer && coyote) {
         XGM2_playPCM(sfx_jump, sizeof(sfx_jump), SOUND_PCM_CH2);
-        // REMOVED: startY / maxY assignments
-        player->vel.y = -JUMP_VEL;
+        // Button may already be released for a buffered tap: give it the short jump
+        player->vel.y = Controller_isHeld(&controller, BUTTON_A) ? -JUMP_VEL : -JUMP_VEL_MIN;
         player->onGround = false;
         player->jumping = true;
+        jumpBuffer = 0;
+        coyote = 0;
     }
+
 }
 
 
@@ -207,8 +214,13 @@ static void setNewYPos(Entity *entity) {
             entity->pos.y = FF32(ENTITY_FROM_TILE_SIZE(tyBottom) - entity->h);
             entity->onGround = true;
             entity->jumping = false;
+            //TODO: Coyote logic should apply to player only
+            coyote = COYOTE_FRAMES;
             entity->vel.y = 0;
         } else {
+            if (coyote) {
+                coyote--;
+            }
             entity->onGround = false;
         }
     } else {
