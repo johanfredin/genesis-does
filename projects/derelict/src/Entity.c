@@ -13,6 +13,7 @@
 #define ENTITY_TO_TILE_SIZE(n) ((n) >> ENTITY_TILE_SHIFT)
 #define ENTITY_FROM_TILE_SIZE(n) ((n) << ENTITY_TILE_SHIFT)
 
+#define BLOCK_NONE 0
 #define BLOCK_SOFT 1
 #define BLOCK_LADDER 2
 #define BLOCK_SOLID 3
@@ -114,7 +115,6 @@ static void handleJump(Entity *player) {
 
 
 static void updatePlayer(Entity *player) {
-    Controller_poll(&controller, JOY_1);
     // Check X
     player->vel.x = 0;
     player->vel.y += GRAVITY;
@@ -154,6 +154,7 @@ static void updatePlayer(Entity *player) {
     if (player->pos.y > FF32(MAP_HEIGHT)) {
         player->pos.x = FF32(160);
         player->pos.y = FF32(190);
+        player->vel = (Vect2D_ff32) {.x = 0, .y = 0};
         XGM2_playPCM(sfx_die, sizeof(sfx_die), SOUND_PCM_CH2);
     }
 }
@@ -202,7 +203,7 @@ static void setNewYPos(Entity *entity) {
         // Resolve collision on the BOTTOM edge
         const s16 tyBottom = ENTITY_TO_TILE_SIZE(y + entity->h);
         const u16 collision = isCollisionRow(tyBottom, txLeft, txRight);
-        if (collision && collision != BLOCK_LADDER) {
+        if (collision) {
             entity->pos.y = FF32(ENTITY_FROM_TILE_SIZE(tyBottom) - entity->h);
             entity->onGround = true;
             entity->jumping = false;
@@ -222,29 +223,62 @@ static void setNewYPos(Entity *entity) {
     }
 }
 
-static u16 isCollisionCol(const s16 tx, const s16 tyTop, const s16 tyBottom) {
+static u16 isCollisionCol(const s16 tx, s16 tyTop, s16 tyBottom) {
+    // Early return if outside bounds
+    if (tx < 0 || tx >= tilemap_collision.w) {
+        return false;
+    }
 
-    
+    // Clamp to edges
+    if (tyTop < 0) {
+        tyTop = 0;
+    }
+    if (tyBottom >= tilemap_collision.h) {
+        tyBottom = (s16)(tilemap_collision.h - 1);
+    }
 
-    for (s16 ty = tyTop; ty <= tyBottom; ty++) {
-        if (ty > 0 && ty < tilemap_collision.h && tx > 0 && tx < tilemap_collision.w) {
-            const u16 collision_tile = tilemap_collision.tilemap[(tilemap_collision.w * ty) + tx];
-            if (collision_tile) {
-                return collision_tile;
-            }
+    const u16 w = tilemap_collision.w;
+    const u16 *tile = &tilemap_collision.tilemap[(w * tyTop) + tx];
+    u16 result = 0;
+
+    // step one row down at a time
+    for (s16 ty = tyTop; ty <= tyBottom; ty++, tile += w) {
+        if (*tile == BLOCK_SOLID) {
+            return BLOCK_SOLID; // Highest priority, stop early
+        }
+        if (*tile > result) {
+            result = *tile; // Prioritize downward and remember result (soft, ladder, etc)
         }
     }
-    return false;
+    return result;
+
 }
 
-static u16 isCollisionRow(const s16 ty, const s16 txLeft, const s16 txRight) {
-    for (s16 tx = txLeft; tx <= txRight; tx++) {
-        if (tx > 0 && tx < tilemap_collision.w && ty > 0 && ty < tilemap_collision.h) {
-            const u16 collision_tile = tilemap_collision.tilemap[(tilemap_collision.w * ty) + tx];
-            if (collision_tile) {
-                return collision_tile;
-            }
+static u16 isCollisionRow(const s16 ty, s16 txLeft, s16 txRight) {
+    // Early return if outside bounds
+    if (ty < 0 || ty >= tilemap_collision.h) {
+        return false;
+    }
+
+    // Clamp to edges
+    if (txLeft < 0) {
+        txLeft = 0;
+    }
+    if (txRight >= tilemap_collision.w) {
+        txRight = (s16)(tilemap_collision.w - 1);
+    }
+
+    const u16 w = tilemap_collision.w;
+    const u16 *tile = &tilemap_collision.tilemap[(w * ty) + txLeft];
+    u16 result = 0;
+
+    for (s16 tx = txLeft; tx <= txRight; tx++, tile++) {
+        if (*tile == BLOCK_SOLID) {
+            return BLOCK_SOLID;
+        }
+        if (*tile > result) {
+            result = *tile;
         }
     }
-    return false;
+    return result;
 }

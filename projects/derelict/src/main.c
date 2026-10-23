@@ -62,7 +62,7 @@ static void init() {
 
 static void updateCamera() {
     camera.x = FF32_toInt(player.pos.x) + (player.w >> 1) - (SCREEN_WIDTH >> 1);
-    camera.y = FF32_toInt(player.pos.y) + (player.w >> 1) - (SCREEN_HEIGHT >> 1);
+    camera.y = FF32_toInt(player.pos.y) + (player.h >> 1) - (SCREEN_HEIGHT >> 1);
 
     if (camera.x < 0) {
         camera.x = 0;
@@ -82,6 +82,7 @@ static void updateCamera() {
 int main(bool b) {
     init();
     while (TRUE) {
+        Controller_poll(&controller, JOY_1);
         Entity_update(&player);
         updateCamera();
         Entity_render(&player);
