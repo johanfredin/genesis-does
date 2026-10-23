@@ -11,6 +11,6 @@ include $(GDK)/makefile.gen
 
 run:
 	blastem out/derelict.bin
-
+	#kega-fusion out/derelict.bin
 dbg:
 	wine ~/gens.exe "./out/derelict.bin"

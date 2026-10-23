@@ -3,6 +3,7 @@
 //
 
 #include "Entity.h"
+
 #include "Globals.h"
 #include "Log.h"
 #include "../res/resources.h"
@@ -19,9 +20,13 @@
 static const ff32 PLAYER_SPEED = FF32(3.2f);
 
 static void updatePlayer(Entity *player);
+
 static void setNewXPos(Entity *entity);
+
 static void setNewYPos(Entity *entity);
+
 static u16 isCollisionCol(s16 tx, s16 tyTop, s16 tyBottom);
+
 static u16 isCollisionRow(s16 ty, s16 txLeft, s16 txRight);
 
 void Entity_init(
@@ -46,7 +51,6 @@ void Entity_init(
     entity->w = w;
     entity->h = h;
     entity->anim = ENTITY_ANIM_IDLE;
-    entity->jumpVel = FF32(8.695f);
     LOG_info("Entity created");
 }
 
@@ -75,6 +79,40 @@ void Entity_destroy(const Entity *const entity) {
     SPR_releaseSprite(entity->spr);
 }
 
+// static const ff32 GRAVITY = FF32(0.66f);
+static const ff32 MAX_GRAVITY = FF32(6.5f);
+
+#define JUMP_H      (32 * 2)   // px
+#define JUMP_T      16         // frames to apex (held)
+#define JUMP_T_MIN  6          // NEW: frames to apex (tap)
+
+#define GRAVITY_F   (2.0f * JUMP_H / (JUMP_T * JUMP_T))           // NEW: float version, reused below
+static const ff32 GRAVITY      = FF32(GRAVITY_F);                // CHANGED: uses GRAVITY_F
+static const ff32 JUMP_VEL     = FF32(2.0f * JUMP_H / JUMP_T);
+static const ff32 JUMP_VEL_MIN = FF32(GRAVITY_F * JUMP_T_MIN);   // NEW: v = g * t
+
+// REMOVED: startY, maxY
+
+static void handleJump(Entity *player) {
+    // REMOVED: jumpVelMin, jumpVelMax
+
+    if (Controller_wasReleased(&controller, BUTTON_A) && player->jumping) {
+        if (player->vel.y < -JUMP_VEL_MIN) {        // CHANGED: was -JUMP_VEL
+            player->vel.y = -JUMP_VEL_MIN;          // CHANGED: was -JUMP_VEL
+        }
+        player->jumping = false;
+    }
+
+    if (Controller_wasPressed(&controller, BUTTON_A) && player->onGround) {
+        XGM2_playPCM(sfx_jump, sizeof(sfx_jump), SOUND_PCM_CH2);
+        // REMOVED: startY / maxY assignments
+        player->vel.y = -JUMP_VEL;
+        player->onGround = false;
+        player->jumping = true;
+    }
+}
+
+
 static void updatePlayer(Entity *player) {
     Controller_poll(&controller, JOY_1);
     // Check X
@@ -100,12 +138,9 @@ static void updatePlayer(Entity *player) {
         setNewXPos(player);
     }
 
-    // Check Y
-    if (Controller_wasPressed(&controller, BUTTON_A) && player->onGround) {
-        XGM2_playPCM(sfx_jump, sizeof(sfx_jump), SOUND_PCM_CH2);
-        player->vel.y -= player->jumpVel;
-        player->onGround = false;
-    }
+    handleJump(player);
+
+
     if (Controller_isHeld(&controller, BUTTON_UP)) {
         player->vel.y = -PLAYER_SPEED;
     }
@@ -121,7 +156,6 @@ static void updatePlayer(Entity *player) {
         player->pos.y = FF32(190);
         XGM2_playPCM(sfx_die, sizeof(sfx_die), SOUND_PCM_CH2);
     }
-
 }
 
 static void setNewXPos(Entity *entity) {
@@ -171,9 +205,10 @@ static void setNewYPos(Entity *entity) {
         if (collision && collision != BLOCK_LADDER) {
             entity->pos.y = FF32(ENTITY_FROM_TILE_SIZE(tyBottom) - entity->h);
             entity->onGround = true;
+            entity->jumping = false;
             entity->vel.y = 0;
         } else {
-            entity->onGround=false;
+            entity->onGround = false;
         }
     } else {
         // Resolve collision on the TOP edge
@@ -188,6 +223,9 @@ static void setNewYPos(Entity *entity) {
 }
 
 static u16 isCollisionCol(const s16 tx, const s16 tyTop, const s16 tyBottom) {
+
+    
+
     for (s16 ty = tyTop; ty <= tyBottom; ty++) {
         if (ty > 0 && ty < tilemap_collision.h && tx > 0 && tx < tilemap_collision.w) {
             const u16 collision_tile = tilemap_collision.tilemap[(tilemap_collision.w * ty) + tx];

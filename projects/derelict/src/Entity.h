@@ -30,6 +30,7 @@ typedef struct Entity_ {
     u8 indentY;
     u8 anim;
     bool onGround;
+    bool jumping;
     ff32 jumpVel;
 } Entity;
 

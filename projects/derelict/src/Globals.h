@@ -11,9 +11,6 @@
 #define MAP_WIDTH 512
 #define MAP_HEIGHT 320
 
-static const ff32 GRAVITY = FF32(0.66f);
-static const ff32 MAX_GRAVITY = FF32(6.5f);
-
 extern Controller controller;
 extern Vect2D_s16 camera;
 

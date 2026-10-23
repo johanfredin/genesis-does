@@ -87,7 +87,7 @@ int main(bool b) {
         Entity_render(&player);
 
         static char buff[32] = {0};
-        sprintf(buff, "on ground=%d, yVel=%lu", player.onGround, player.vel.y);
+        sprintf(buff, "on ground=%d, jumping=%d", player.onGround, player.jumping);
         VDP_drawTextBGFill(WINDOW, buff, 1, 1, 32);
 
         SPR_update();
