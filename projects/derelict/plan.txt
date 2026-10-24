@@ -8,10 +8,13 @@ SOLVED:
 * music
 * tile priority
 * Proper controller callback. Ability to detect button released
+* Dynamic jump height. Simple touch small jump. Button held = higher jump
 
 TODO:
 -----
-* Dynamic jump height. Simple touch small jump. Button held = higher jump
+* Jump down from ledge
+* Ladders
+* ff16 when suitable
 * Jump animation
 * New tilesets
 * Project structure

@@ -86,20 +86,24 @@ static const ff32 MAX_GRAVITY = FF32(6.5f);
 #define JUMP_H      (32 * 2)   // px
 #define JUMP_T      16         // frames to apex (held)
 #define JUMP_T_MIN  6          // NEW: frames to apex (tap)
-#define JUMP_BUFFER_FRAMES 7
+#define JUMP_BUFFER_FRAMES 6
 
 #define GRAVITY_F   (2.0f * JUMP_H / (JUMP_T * JUMP_T))           // NEW: float version, reused below
 static const ff32 GRAVITY      = FF32(GRAVITY_F);                // CHANGED: uses GRAVITY_F
 static const ff32 JUMP_VEL     = FF32(2.0f * JUMP_H / JUMP_T);
 static const ff32 JUMP_VEL_MIN = FF32(GRAVITY_F * JUMP_T_MIN);   // NEW: v = g * t
-#define COYOTE_FRAMES 7
+#define COYOTE_FRAMES 6
 static u8 coyote = 0;
 static u8 jumpBuffer = 0;
 
-// REMOVED: startY, maxY
-
 static void handleJump(Entity *player) {
-    // REMOVED: jumpVelMin, jumpVelMax
+    if (Controller_wasReleased(&controller, BUTTON_A) && player->jumping) {
+        if (player->vel.y < -JUMP_VEL_MIN) {
+            player->vel.y = -JUMP_VEL_MIN;
+        }
+        player->jumping = false;
+    }
+
 
     // Remember a press for a few frames
     if (Controller_wasPressed(&controller, BUTTON_A)) {
@@ -109,7 +113,7 @@ static void handleJump(Entity *player) {
     }
 
     if (jumpBuffer && coyote) {
-        XGM2_playPCM(sfx_jump, sizeof(sfx_jump), SOUND_PCM_CH2);
+        // XGM2_playPCM(sfx_jump, sizeof(sfx_jump), SOUND_PCM_CH2);
         // Button may already be released for a buffered tap: give it the short jump
         player->vel.y = Controller_isHeld(&controller, BUTTON_A) ? -JUMP_VEL : -JUMP_VEL_MIN;
         player->onGround = false;
@@ -139,12 +143,6 @@ static void updatePlayer(Entity *player) {
         SPR_setHFlip(player->spr, FALSE);
     }
 
-    // Did we move on X axis?
-    if (ENTITY_MOVED(player->vel.x)) {
-        player->anim = ENTITY_ANIM_WALK;
-        setNewXPos(player);
-    }
-
     handleJump(player);
 
 
@@ -155,6 +153,12 @@ static void updatePlayer(Entity *player) {
     // Did we move on Y axis?
     if (ENTITY_MOVED(player->vel.y)) {
         setNewYPos(player);
+    }
+
+    // Did we move on X axis?
+    if (ENTITY_MOVED(player->vel.x)) {
+        player->anim = ENTITY_ANIM_WALK;
+        setNewXPos(player);
     }
 
     // Safeguard
