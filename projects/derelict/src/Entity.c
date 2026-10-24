@@ -80,7 +80,7 @@ void Entity_destroy(const Entity *const entity) {
     SPR_releaseSprite(entity->spr);
 }
 
-// static const ff32 GRAVITY = FF32(0.66f);
+//TODO: All these will be fixed and structured
 static const ff32 MAX_GRAVITY = FF32(6.5f);
 
 #define JUMP_H      (32 * 2)   // px
@@ -95,6 +95,8 @@ static const ff32 JUMP_VEL_MIN = FF32(GRAVITY_F * JUMP_T_MIN);   // NEW: v = g *
 #define COYOTE_FRAMES 6
 static u8 coyote = 0;
 static u8 jumpBuffer = 0;
+static bool onSoftBlock = false;
+static ff32 shimmyDown = FF32(8);
 
 static void handleJump(Entity *player) {
     if (Controller_wasReleased(&controller, BUTTON_A) && player->jumping) {
@@ -118,12 +120,24 @@ static void handleJump(Entity *player) {
         player->vel.y = Controller_isHeld(&controller, BUTTON_A) ? -JUMP_VEL : -JUMP_VEL_MIN;
         player->onGround = false;
         player->jumping = true;
+        onSoftBlock = false;
         jumpBuffer = 0;
         coyote = 0;
     }
-
 }
 
+static bool handleDropOfLedge(Entity *player) {
+    if (onSoftBlock) {
+        if (Controller_wasPressed(&controller, BUTTON_A) && Controller_isHeld(&controller, BUTTON_DOWN)) {
+            player->pos.y += shimmyDown;
+            coyote=0;
+            onSoftBlock=false;
+            jumpBuffer=0;
+            return true;
+        }
+    }
+    return false;
+}
 
 static void updatePlayer(Entity *player) {
     // Check X
@@ -143,7 +157,16 @@ static void updatePlayer(Entity *player) {
         SPR_setHFlip(player->spr, FALSE);
     }
 
-    handleJump(player);
+    // Did we move on X axis?
+    if (ENTITY_MOVED(player->vel.x)) {
+        player->anim = ENTITY_ANIM_WALK;
+        setNewXPos(player);
+    }
+
+    if (!handleDropOfLedge(player)) {
+        handleJump(player);
+    }
+
 
 
     if (Controller_isHeld(&controller, BUTTON_UP)) {
@@ -153,12 +176,6 @@ static void updatePlayer(Entity *player) {
     // Did we move on Y axis?
     if (ENTITY_MOVED(player->vel.y)) {
         setNewYPos(player);
-    }
-
-    // Did we move on X axis?
-    if (ENTITY_MOVED(player->vel.x)) {
-        player->anim = ENTITY_ANIM_WALK;
-        setNewXPos(player);
     }
 
     // Safeguard
@@ -215,6 +232,9 @@ static void setNewYPos(Entity *entity) {
         const s16 tyBottom = ENTITY_TO_TILE_SIZE(y + entity->h);
         const u16 collision = isCollisionRow(tyBottom, txLeft, txRight);
         if (collision) {
+            // If on a soft block we can jump down from it
+            onSoftBlock = (collision == BLOCK_SOFT);
+
             entity->pos.y = FF32(ENTITY_FROM_TILE_SIZE(tyBottom) - entity->h);
             entity->onGround = true;
             entity->jumping = false;
@@ -225,6 +245,7 @@ static void setNewYPos(Entity *entity) {
             if (coyote) {
                 coyote--;
             }
+            onSoftBlock = false;
             entity->onGround = false;
         }
     } else {

@@ -15,9 +15,9 @@ TODO:
 * Jump down from ledge
 * Ladders
 * ff16 when suitable
+* Project structure
 * Jump animation
 * New tilesets
-* Project structure
 * Enemies/Enemy AI
 * Menus
 * HUD window

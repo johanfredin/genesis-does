@@ -41,7 +41,7 @@ static void init() {
         PLAYER,
         &spr_cat,
         TILE_ATTR(PAL2, 0, 0, 0),
-        170,
+        270,
         190,
         16,
         16,
