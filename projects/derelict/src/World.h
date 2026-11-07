@@ -6,10 +6,8 @@
 #define GENESIS_DOES_WORLD_H
 #include <genesis.h>
 
-#define N_LEVELS 1
-
 void World_init();
 void World_startLevel(u16 level);
-u16 World_getCurrentLevel();
+void World_switchLevel(u16 level);
 
 #endif //GENESIS_DOES_WORLD_H

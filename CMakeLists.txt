@@ -41,5 +41,7 @@ add_executable(
         projects/derelict/src/World.h
         projects/derelict/src/Level.c
         projects/derelict/src/Level.h
+        projects/derelict/src/LevelDefs.c
+        projects/derelict/src/LevelDefs.h
 
 )
