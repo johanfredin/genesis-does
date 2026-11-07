@@ -1,9 +1,7 @@
-//
-// Created by johan on 2026-10-05.
-//
-
 #ifndef GENESIS_DOES_LOGGER_H
 #define GENESIS_DOES_LOGGER_H
+
+// Used for kprintf
 
 #define LOG_LEVEL_OFF   0
 #define LOG_LEVEL_INF  1

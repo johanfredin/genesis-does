@@ -4,8 +4,7 @@
 
 #ifndef GENESIS_DOES_CONTROLLER_H
 #define GENESIS_DOES_CONTROLLER_H
-#include <types.h>
-#include <joy.h>
+#include <genesis.h>
 
 typedef struct Controller_ {
     u16 current;
