@@ -7,13 +7,14 @@
 #include <genesis.h>
 
 #include "LevelDefs.h"
+#include "Player.h"
 
 typedef struct Level_ {
     Vect2D_u16 spawn;
     Vect2D_u16 bounds;
     const TileMap *collisionTiles;
-    const Image *bg;
-    const Map *map;
+    const Map *bg;
+    const Map *fg;
 
     /*
      * TODO: Implement:
@@ -23,7 +24,7 @@ typedef struct Level_ {
      */
 } Level;
 
-void Level_init(Level *level, const LevelDefinition *def, u16 tileIndex);
+void Level_init(Level *level, const LevelDefinition *def, u16 *tileIndex);
 void Level_update(Level *level);
 void Level_render(Level *level);
 void Level_destroy(Level *level);

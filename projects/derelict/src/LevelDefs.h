@@ -8,12 +8,13 @@
 #include <genesis.h>
 
 typedef struct LevelDef_ {
-    const Image *bg;                    // BG_B, palette in bg->palette
-    const MapDefinition *map;           // BG_A
-    const Palette *mapPalette;
-    const TileSet *const *mapTilesets;
+    const TileSet *tilesetBG;
+    const TileSet *tilesetFG;
+    const Palette *paletteBG;
+    const Palette *paletteFG;
+    const MapDefinition *mapBg;
+    const MapDefinition *mapFg;
     const TileMap *collision;
-    u8 numMapTilesets;
 } LevelDefinition;
 
 const LevelDefinition *LevelDefs_get(u16 n);

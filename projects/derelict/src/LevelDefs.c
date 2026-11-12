@@ -8,18 +8,15 @@
 
 #define N_LEVELS 1
 
-static const TileSet *const level1TileSets[] = {
-    &tileset_fg_jungle3
-};
-
 static const LevelDefinition levels[N_LEVELS] = {
     {
         // Level 1
-        .bg = nullptr,
-        .map = &map_fg_jungle3,
-        .mapPalette = &palette_fg_jungle3,
-        .mapTilesets = level1TileSets,
-        .numMapTilesets = sizeof(level1TileSets) / sizeof(level1TileSets[0]),
+        .paletteBG = &palette_bg_jungle3,
+        .paletteFG = &palette_fg_jungle3,
+        .tilesetBG = &map_bg_jungle3_tileset0,
+        .tilesetFG = &map_fg_jungle3_tileset0,
+        .mapBg = &map_bg_jungle3,
+        .mapFg = &map_fg_jungle3,
         .collision = &tilemap_collision
     }
 };

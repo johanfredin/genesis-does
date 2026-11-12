@@ -43,5 +43,9 @@ add_executable(
         projects/derelict/src/Level.h
         projects/derelict/src/LevelDefs.c
         projects/derelict/src/LevelDefs.h
+        projects/derelict/src/Player.c
+        projects/derelict/src/Player.h
+        projects/derelict/src/Camera.c
+        projects/derelict/src/Camera.h
 
 )

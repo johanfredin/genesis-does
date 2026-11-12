@@ -10,8 +10,9 @@
 
 static u16 tileIndex = TILE_USER_INDEX;
 static u16 hudTiles = 0;
-
 static Level currentLevel = {0};
+
+Player player = {0};
 
 void World_init() {
     //TODO: Load HUD
@@ -23,7 +24,7 @@ void World_init() {
 
 void World_startLevel(const u16 level) {
     const LevelDefinition *def = LevelDefs_get(level);
-    Level_init(&currentLevel, def, tileIndex);
+    Level_init(&currentLevel, def, &tileIndex);
 }
 
 void World_switchLevel(const u16 level) {
