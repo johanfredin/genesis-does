@@ -50,5 +50,6 @@ void Player_init(
 void Player_update(Player *player);
 void Player_render(const Player *player);
 void Player_destroy(const Player *player);
+Vect2D_s16 Player_getCenterPos(const Player *player);
 
 #endif //GENESIS_DOES_PLAYER_H

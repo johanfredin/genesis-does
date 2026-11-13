@@ -30,17 +30,16 @@ void Player_init(
 ) {
     player->spr = SPR_addSprite(sprDef, pos.x, pos.y, sprAttr);
     player->pos = (Vect2D_ff32){.x = FF32(pos.x), .y = FF32(pos.y)};
-    player->vel = vel;
     player->indentX = boundXIndent;
     player->indentY = boundYIndent;
     player->w = w;
     player->h = h;
     player->anim = 0;
+    player->vel = vel;
     LOG_debug("Player initialized");
 }
 
 void Player_update(Player *player) {
-
 }
 
 void Player_render(const Player *player) {
@@ -55,4 +54,12 @@ void Player_render(const Player *player) {
 
 void Player_destroy(const Player *player) {
     SPR_releaseSprite(player->spr);
+}
+
+Vect2D_s16 Player_getCenterPos(const Player *player) {
+    //TODO: Maybe turn into macro or inline
+    return (Vect2D_s16){
+        .x = (s16)(FF32_toInt(player->pos.x) + (player->w >> 1)),
+        .y = (s16)(FF32_toInt(player->pos.y) + (player->h >> 1))
+    };
 }

@@ -24,9 +24,9 @@ typedef struct Level_ {
      */
 } Level;
 
-void Level_init(Level *level, const LevelDefinition *def, u16 *tileIndex);
+void Level_init(Level *level, const LevelDefinition *def, u16 *tileIndex, Player *player);
 void Level_update(Level *level);
-void Level_render(Level *level);
-void Level_destroy(Level *level);
+void Level_render();
+void Level_destroy(const Level *level);
 
 #endif //GENESIS_DOES_LEVEL_H

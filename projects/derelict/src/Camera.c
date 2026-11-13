@@ -9,20 +9,20 @@
 
 typedef struct Cam_ {
     Vect2D_s16 pos;
-    Vect2D_s16 viewPortSize;
+    Vect2D_u16 viewPortSize;
 } Cam;
 
 static Cam cam = {0};
 
-void Camera_init(const Vect2D_s16 pos, const Vect2D_s16 viewportSize) {
+void Camera_init(const Vect2D_s16 pos, const Vect2D_u16 viewportSize) {
     cam.pos = pos;
     cam.viewPortSize = viewportSize;
     LOG_debug("Camera initialized");
 }
 
-void Camera_update(const Vect2D_ff32 pos) {
-    cam.pos.x = (s16) (FF32_toInt(pos.x) - (SCREEN_WIDTH >> 1));
-    cam.pos.y = (s16) (FF32_toInt(pos.y) - (SCREEN_HEIGHT >> 1));
+void Camera_update(const Vect2D_s16 pos) {
+    cam.pos.x = (s16)(pos.x - (SCREEN_WIDTH >> 1));
+    cam.pos.y = (s16)(pos.y - (SCREEN_HEIGHT >> 1));
 
     if (cam.pos.x < 0) {
         cam.pos.x = 0;

@@ -6,9 +6,6 @@
 #define GENESIS_DOES_WORLD_H
 
 #include <genesis.h>
-#include "Player.h"
-
-extern Player player;
 
 void World_init();
 void World_startLevel(u16 level);
