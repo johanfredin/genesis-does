@@ -23,7 +23,6 @@ static const ff32 PLAYER_SPEED = FF32(3.2f);
 static void updatePlayer(Entity *player);
 
 static void setNewXPos(Entity *entity);
-
 static void setNewYPos(Entity *entity);
 
 static u16 isCollisionCol(s16 tx, s16 tyTop, s16 tyBottom);
@@ -121,7 +120,6 @@ static void handleJump(Entity *player) {
         jumpBuffer = 0;
         coyote = 0;
     }
-
 }
 
 

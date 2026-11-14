@@ -11,7 +11,7 @@
 static Player *player = nullptr;
 static const TileMap *collisionBlocks = nullptr;
 
-void Level_init(Level *level, const LevelDefinition *def, u16 *tileIndex, Player *playerRef) {
+void Level_init(Level *const level, const LevelDefinition *const def, u16 *const tileIndex, Player *const playerRef) {
     // Init map and map tilesets --------------------------------------------
     // TODO: fix so that these comes from TILED
     level->bounds = (Vect2D_u16){
@@ -58,10 +58,16 @@ void Level_render() {
     Player_render(player);
 }
 
-void Level_update(Level *level) {
+void Level_update(const Level *level) {
+
     Controller_poll(&controller, JOY_1);
-    Player_update(player);
+
+    Player_update(player, level->collisionTiles);
     Camera_update(Player_getCenterPos(player));
+
+    const Vect2D_s16 *cam = Camera_getPos();
+    MAP_scrollTo(level->bg, cam->x >> 2, cam->y >> 3);
+    MAP_scrollTo(level->fg, cam->x, cam->y);
 
     SPR_update();
     SYS_doVBlankProcess();

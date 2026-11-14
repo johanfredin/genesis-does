@@ -47,5 +47,7 @@ add_executable(
         projects/derelict/src/Player.h
         projects/derelict/src/Camera.c
         projects/derelict/src/Camera.h
+        projects/derelict/src/Grid.c
+        projects/derelict/src/Grid.h
 
 )

@@ -13,8 +13,8 @@ typedef struct Level_ {
     Vect2D_u16 spawn;
     Vect2D_u16 bounds;
     const TileMap *collisionTiles;
-    const Map *bg;
-    const Map *fg;
+    Map *bg;
+    Map *fg;
 
     /*
      * TODO: Implement:
@@ -24,8 +24,8 @@ typedef struct Level_ {
      */
 } Level;
 
-void Level_init(Level *level, const LevelDefinition *def, u16 *tileIndex, Player *player);
-void Level_update(Level *level);
+void Level_init(Level *level, const LevelDefinition *def, u16 *tileIndex, Player *playerRef);
+void Level_update(const Level *level);
 void Level_render();
 void Level_destroy(const Level *level);
 

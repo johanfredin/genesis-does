@@ -25,8 +25,7 @@ void World_init() {
         16,
         16,
         16,
-        32,
-        (Vect2D_ff32) {.x = FF32(2.2f), .y = FF32(2.2f)}
+        32
     );
 
     VDP_setScrollingMode(HSCROLL_PLANE, VSCROLL_PLANE);
