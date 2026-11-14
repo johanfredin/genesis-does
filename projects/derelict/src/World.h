@@ -10,5 +10,7 @@
 void World_init();
 void World_startLevel(u16 level);
 void World_switchLevel(u16 level);
+void World_update();
+void World_render();
 
 #endif //GENESIS_DOES_WORLD_H

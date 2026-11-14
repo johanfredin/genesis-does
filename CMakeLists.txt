@@ -29,9 +29,6 @@ add_executable(
         projects/hello-tilebased-collision/src/Grid.c
 
 
-        projects/derelict/src/Entity.c
-        projects/derelict/src/Entity.h
-        projects/derelict/src/Globals.h
         projects/derelict/src/Log.h
         projects/derelict/src/Game.c
         projects/derelict/src/Game.h

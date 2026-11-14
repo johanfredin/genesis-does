@@ -4,6 +4,7 @@
 
 #include "World.h"
 #include "Level.h"
+#include "Log.h"
 #include "../res/resources.h"
 
 static u16 tileIndex = TILE_USER_INDEX;
@@ -30,6 +31,8 @@ void World_init() {
 
     VDP_setScrollingMode(HSCROLL_PLANE, VSCROLL_PLANE);
     VDP_setWindowVPos(FALSE, 2);
+
+    LOG_debug("World initialized");
 }
 
 void World_startLevel(const u16 level) {
@@ -41,4 +44,12 @@ void World_switchLevel(const u16 level) {
     Level_destroy(&currentLevel);
     tileIndex = TILE_USER_INDEX + hudTiles;
     World_startLevel(level);
+}
+
+void World_update() {
+    Level_update(&currentLevel);
+}
+
+void World_render() {
+    Level_render();
 }

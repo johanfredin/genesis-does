@@ -8,4 +8,7 @@
 void MainMenu_init();
 void MainMenu_startGame();
 
+void MainMenu_render();
+void MainMenu_update();
+
 #endif //GENESIS_DOES_MAINMENU_H

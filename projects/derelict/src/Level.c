@@ -3,13 +3,14 @@
 //
 
 #include "Level.h"
-
 #include "Camera.h"
-#include "Globals.h"
 #include "Log.h"
+#include "Game.h"
+
+#define MAP_WIDTH 512
+#define MAP_HEIGHT 320
 
 static Player *player = nullptr;
-static const TileMap *collisionBlocks = nullptr;
 
 void Level_init(Level *const level, const LevelDefinition *const def, u16 *const tileIndex, Player *const playerRef) {
     // Init map and map tilesets --------------------------------------------
@@ -36,7 +37,7 @@ void Level_init(Level *const level, const LevelDefinition *const def, u16 *const
 
     *tileIndex += def->tilesetFG->numTile;
 
-    collisionBlocks = def->collision;
+    level->collisionTiles = def->collision;
 
 
     // Assign player and update spawn point ---------------------------------
@@ -59,7 +60,6 @@ void Level_render() {
 }
 
 void Level_update(const Level *level) {
-
     Controller_poll(&controller, JOY_1);
 
     Player_update(player, level->collisionTiles);
@@ -68,9 +68,6 @@ void Level_update(const Level *level) {
     const Vect2D_s16 *cam = Camera_getPos();
     MAP_scrollTo(level->bg, cam->x >> 2, cam->y >> 3);
     MAP_scrollTo(level->fg, cam->x, cam->y);
-
-    SPR_update();
-    SYS_doVBlankProcess();
 }
 
 void Level_destroy(const Level *level) {

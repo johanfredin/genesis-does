@@ -3,6 +3,9 @@
 //
 #include "Controller.h"
 
+#include "../projects/derelict/src/Log.h"
+
 inline void Controller_init() {
     JOY_init();
+    LOG_debug("Controller initialized");
 }
