@@ -20,7 +20,9 @@
 #define GRAVITY_F   (2.0f * JUMP_H / (JUMP_T * JUMP_T))  // NEW: float version, reused below
 
 static void setNewXPos(Player *player, const TileMap *grid);
+
 static void setNewYPos(Player *player, const TileMap *grid);
+
 static void handleJump(Player *player);
 
 static const ff32 GRAVITY = FF32(GRAVITY_F);
@@ -33,6 +35,9 @@ static const ff32 SPEED = FF32(3.2f);
 
 static u8 g_coyote = 0;
 static u8 g_jumpBuffer = 0;
+
+static bool onSoftBlock = false;
+static ff32 shimmyDown = FF32(8);
 
 void Player_init(
     Player *player,
@@ -56,6 +61,19 @@ void Player_init(
     LOG_debug("Player initialized");
 }
 
+static bool handleDropOfLedge(Player *player) {
+    if (onSoftBlock) {
+        if (Controller_wasPressed(&controller, BUTTON_A) && Controller_isHeld(&controller, BUTTON_DOWN)) {
+            player->pos.y += shimmyDown;
+            g_coyote = 0;
+            onSoftBlock = false;
+            g_jumpBuffer = 0;
+            return true;
+        }
+    }
+    return false;
+}
+
 void Player_update(Player *player, const TileMap *grid) {
     // Check X
     player->vel.x = 0;
@@ -74,7 +92,9 @@ void Player_update(Player *player, const TileMap *grid) {
         SPR_setHFlip(player->spr, FALSE);
     }
 
-    handleJump(player);
+    if (!handleDropOfLedge(player)) {
+        handleJump(player);
+    }
 
     // Did we move on Y axis?
     if (PLAYER_MOVED(player->vel.y)) {
@@ -91,7 +111,7 @@ void Player_update(Player *player, const TileMap *grid) {
     if (player->pos.y > FF32(GRID_TO_PIXELS(grid->h))) {
         player->pos.x = FF32(160);
         player->pos.y = FF32(190);
-        player->vel = (Vect2D_ff32) {.x = 0, .y = 0};
+        player->vel = (Vect2D_ff32){.x = 0, .y = 0};
     }
 }
 
@@ -115,7 +135,6 @@ static void handleJump(Player *player) {
             player->vel.y = -JUMP_VEL_MIN;
         }
     }
-
 
     // Remember a press for a few frames
     if (Controller_wasPressed(&controller, BUTTON_A)) {
@@ -177,8 +196,11 @@ static void setNewYPos(Player *player, const TileMap *grid) {
     if (PLAYER_HEADING_DOWN(player->vel.y)) {
         // Resolve collision on the BOTTOM edge
         const s16 tyBottom = GRID_TO_TILE_INDEX(y + player->h);
-        const u16 collision = Grid_collisionRowAt(grid, tyBottom, txLeft, txRight);
+        const GridBlock collision = Grid_collisionRowAt(grid, tyBottom, txLeft, txRight);
         if (collision) {
+
+            onSoftBlock = (collision == GRID_BLOCK_SOFT);
+
             player->pos.y = FF32(GRID_TO_PIXELS(tyBottom) - player->h);
             player->state = ON_GROUND;
             g_coyote = COYOTE_FRAMES;
@@ -187,6 +209,7 @@ static void setNewYPos(Player *player, const TileMap *grid) {
             if (g_coyote) {
                 g_coyote--;
             }
+            onSoftBlock = false;
             player->state = AIR;
         }
     } else {

@@ -20,7 +20,8 @@ typedef enum PlayerState_ :u8 {
     NONE,
     ON_GROUND,
     AIR,
-    LADDER
+    LADDER,
+    DEAD
 } PlayerState;
 
 typedef struct Player_ {
