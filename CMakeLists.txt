@@ -25,10 +25,26 @@ add_executable(
         projects/hello-map/src/main.c
         projects/hello-object-collision/src/main.c
         projects/hello-tiled/src/main.c
-        projects/derelict/src/Entity.c
-        projects/derelict/src/Entity.h
-        projects/derelict/src/Globals.h
-        projects/derelict/src/Log.h
         projects/hello-tilebased-collision/src/Grid.h
         projects/hello-tilebased-collision/src/Grid.c
+
+
+        projects/derelict/src/Log.h
+        projects/derelict/src/Game.c
+        projects/derelict/src/Game.h
+        projects/derelict/src/MainMenu.c
+        projects/derelict/src/MainMenu.h
+        projects/derelict/src/World.c
+        projects/derelict/src/World.h
+        projects/derelict/src/Level.c
+        projects/derelict/src/Level.h
+        projects/derelict/src/LevelDefs.c
+        projects/derelict/src/LevelDefs.h
+        projects/derelict/src/Player.c
+        projects/derelict/src/Player.h
+        projects/derelict/src/Camera.c
+        projects/derelict/src/Camera.h
+        projects/derelict/src/Grid.c
+        projects/derelict/src/Grid.h
+
 )
